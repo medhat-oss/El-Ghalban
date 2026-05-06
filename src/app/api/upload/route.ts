@@ -9,6 +9,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 
+// إعدادات الـ App Router للتعامل مع الرفع الكبير
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const MAX_FILE_SIZE   = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_TYPES   = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -76,7 +80,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Cloudinary uploads can be large — increase body size limit
-export const config = {
-  api: { bodyParser: false },
-};
+// ⚠️ تم حذف export const config القديم لأنه غير مدعوم في App Router ويسبب فشل الـ Build
