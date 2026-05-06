@@ -1,6 +1,6 @@
 // ============================================================
-// El-Ghalban | الغلبان — Prisma Schema
-// Provider: PostgreSQL (Supabase / Neon compatible)
+// El-Ghalban | الغلبان — Prisma Schema (Optimized)
+// Provider: PostgreSQL (Neon / Supabase)
 // ============================================================
 
 generator client {
@@ -32,57 +32,79 @@ model Category {
 // Product Model
 // ─────────────────────────────────────────────
 model Product {
-  id            String   @id @default(cuid())
-  name          String   // English name
-  nameAr        String   // Arabic display name
-  description   String?  // English description
-  descriptionAr String?  // Arabic description
-  price         Float    // Price in EGP (Egyptian Pounds)
-  oldPrice      Float?   // Original price before discount
-  images        String[] // Array of Cloudinary URLs
-  isAvailable   Boolean  @default(true)  // Inventory availability flag
-  isFeatured    Boolean  @default(false) // Show on homepage
-  stock         Int      @default(0)     // Quantity in stock
-  brand         String?  // e.g. "Samsung", "Apple"
-  model         String?  // e.g. "Galaxy S24"
+  id            String      @id @default(cuid())
+  name          String      // English name
+  nameAr        String      // Arabic display name
+  description   String?     @db.Text // وصف طويل
+  descriptionAr String?     @db.Text
+  price         Float       // Price in EGP
+  oldPrice      Float?      // Original price before discount
+  images        String[]    // Array of Cloudinary URLs
+  isAvailable   Boolean     @default(true)
+  isFeatured    Boolean     @default(false)
+  stock         Int         @default(0)
+  brand         String?     // e.g. "Samsung"
+  model         String?     // e.g. "Galaxy S24"
   categoryId    String
-  category      Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  
+  // علاقة مع تفاصيل الطلبات لتحليل المبيعات مستقبلاً
+  orderItems    OrderItem[]
 
-  // Indexes for optimized querying
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Indexes محسنّة للبحث والفلترة
   @@index([categoryId])
-  @@index([isAvailable])
-  @@index([isFeatured])
-  @@index([createdAt(sort: Desc)])
+  @@index([isAvailable, isFeatured])
   @@index([price])
   @@map("products")
 }
 
 // ─────────────────────────────────────────────
-// Order Model
+// Order Model (المحسن للأداء)
 // ─────────────────────────────────────────────
 model Order {
-  id           String      @id @default(cuid())
-  orderNumber  String      @unique @default(cuid()) // Human-readable ref
-  customerName String
-  phone        String
-  address      String
-  city         String?
-  notes        String?
-  items        Json        // Serialised cart snapshot
-  subtotal     Float
-  deliveryFee  Float       @default(0)
-  total        Float
-  status       OrderStatus @default(PENDING)
-  paymentMethod String     @default("CASH_ON_DELIVERY")
-  sentViaWhatsApp Boolean  @default(false)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique @default(cuid()) 
+  customerName    String
+  phone           String
+  address         String
+  city            String?
+  notes           String?       @db.Text
+  
+  // التفاصيل المحسنة للأوردر
+  items           OrderItem[]   // علاقة مع جدول التفاصيل
+  
+  subtotal        Float
+  deliveryFee     Float         @default(0)
+  total           Float
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   String        @default("CASH_ON_DELIVERY")
+  sentViaWhatsApp Boolean       @default(false)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@index([status])
   @@index([createdAt(sort: Desc)])
   @@map("orders")
+}
+
+// ─────────────────────────────────────────────
+// OrderItem Model (جديد: لتنظيم محتويات السلة)
+// ─────────────────────────────────────────────
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  quantity  Int
+  price     Float   // السعر وقت الشراء (عشان لو السعر اتغير في المتجر يفضل ثابت في الأوردر)
+  
+  @@map("order_items")
 }
 
 // ─────────────────────────────────────────────
