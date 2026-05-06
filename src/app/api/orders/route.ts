@@ -3,7 +3,7 @@
 // POST — save a new order record when WhatsApp checkout fires
 // GET  — list orders (admin only)
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
