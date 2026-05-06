@@ -2,7 +2,7 @@
 // El-Ghalban | app/admin/layout.tsx — Admin Dashboard Layout
 // Dark sidebar with navigation links
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import React from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

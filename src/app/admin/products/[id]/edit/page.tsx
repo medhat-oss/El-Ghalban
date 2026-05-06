@@ -1,7 +1,7 @@
 // ============================================================
 // El-Ghalban | app/admin/products/[id]/edit/page.tsx
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
