@@ -2,7 +2,7 @@
 // El-Ghalban | app/(store)/mobiles/page.tsx — Mobiles Page
 // Server Component with client-side filter sidebar
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import React from "react";
 import { Smartphone } from "lucide-react";
 import { prisma } from "@/lib/prisma";

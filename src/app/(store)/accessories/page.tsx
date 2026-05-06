@@ -1,7 +1,7 @@
 // ============================================================
 // El-Ghalban | app/(store)/accessories/page.tsx
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import React from "react";
 import { Headphones } from "lucide-react";
 import { prisma } from "@/lib/prisma";

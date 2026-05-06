@@ -2,7 +2,7 @@
 // El-Ghalban | app/(store)/page.tsx — Home Page (الرئيسية)
 // Server Component — fetches featured products from DB
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import React from "react";
 import Link from "next/link";
 import {

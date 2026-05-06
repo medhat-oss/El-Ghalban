@@ -2,7 +2,7 @@
 // ============================================================
 // El-Ghalban | app/(store)/maintenance/page.tsx — صيانة
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import React, { useState } from "react";
 import {
   Wrench, Smartphone, Monitor, Battery, Wifi, HardDrive,
