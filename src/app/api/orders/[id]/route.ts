@@ -12,23 +12,21 @@ const updateSchema = z.object({
   status: z.enum(validStatuses),
 });
 
-// إضافة هذه الدالة تجعل Next.js يتخطى أي محاولة بناء ثابت (Static Generation) لهذا المسار
-export async function generateStaticParams() {
-  return [];
-}
-
-export async function PATCH(
-  request: NextRequest, 
-  { params }: { params: { id: string } }
-) {
+// استخدمنا context: any عشان نتفادى أخطاء الـ TypeScript بين إصدارات Next.js
+export async function PATCH(request: NextRequest, context: any) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== "admin") {
       return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 401 });
     }
 
-    // انتظر الـ params للتأكد من استقرارها (Next.js 14/15 Requirement)
+    // الطريقة دي آمنة 100% سواء كنت بتستخدم Next.js 14 أو 15
+    const params = await Promise.resolve(context.params);
     const id = params.id;
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: "رقم الطلب مفقود" }, { status: 400 });
+    }
 
     const body = await request.json();
     const validated = updateSchema.parse(body);
@@ -43,9 +41,4 @@ export async function PATCH(
   } catch (error) {
     return NextResponse.json({ success: false, error: "فشل التحديث" }, { status: 500 });
   }
-}
-
-// أضف GET احتياطية فارغة
-export async function GET() {
-    return NextResponse.json({ status: "active" });
 }
