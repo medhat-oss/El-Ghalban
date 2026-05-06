@@ -1,5 +1,5 @@
 // El-Ghalban | app/api/orders/[id]/route.ts — PATCH order status
-
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
