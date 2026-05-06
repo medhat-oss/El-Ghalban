@@ -1,10 +1,12 @@
-export const dynamic = 'force-dynamic';
-
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+
+// إجبار السيرفر على جعل المسار ديناميكي وعدم الكاش
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const validStatuses = ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"] as const;
 
@@ -12,16 +14,19 @@ const updateSchema = z.object({
   status: z.enum(validStatuses),
 });
 
-// استخدمنا context: any عشان نتفادى أخطاء الـ TypeScript بين إصدارات Next.js
-export async function PATCH(request: NextRequest, context: any) {
+// لاحظ التغيير هنا: params أصبحت Promise
+export async function PATCH(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== "admin") {
       return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 401 });
     }
 
-    // الطريقة دي آمنة 100% سواء كنت بتستخدم Next.js 14 أو 15
-    const params = await Promise.resolve(context.params);
+    // هنا السر: لازم نعمل await للـ params في Next.js 15
+    const params = await props.params;
     const id = params.id;
 
     if (!id) {
