@@ -4,7 +4,7 @@
 // PATCH  — update product (admin)
 // DELETE — delete product (admin)
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

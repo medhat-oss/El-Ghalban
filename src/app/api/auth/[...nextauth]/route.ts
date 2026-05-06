@@ -2,7 +2,7 @@
 // El-Ghalban | app/api/auth/[...nextauth]/route.ts
 // NextAuth catch-all route for credential-based admin auth
 // ============================================================
-
+export const dynamic = 'force-dynamic';
 import NextAuth from "next-auth";
 import { authOptions } from "@/lib/auth";
 
