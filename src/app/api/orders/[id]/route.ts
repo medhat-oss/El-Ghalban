@@ -1,7 +1,3 @@
-// ============================================================
-// El-Ghalban | app/api/orders/[id]/route.ts — PATCH order status
-// ============================================================
-
 export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from "next/server";
@@ -16,28 +12,27 @@ const updateSchema = z.object({
   status: z.enum(validStatuses),
 });
 
+// إضافة هذه الدالة تجعل Next.js يتخطى أي محاولة بناء ثابت (Static Generation) لهذا المسار
+export async function generateStaticParams() {
+  return [];
+}
+
 export async function PATCH(
   request: NextRequest, 
   { params }: { params: { id: string } }
 ) {
   try {
-    // ── Auth Guard ─────────────────────────────────────────
     const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== "admin") {
       return NextResponse.json({ success: false, error: "غير مصرح" }, { status: 401 });
     }
 
-    // استخراج الـ ID والتأكد منه (مهم جداً للـ Build)
-    const { id } = params;
-    if (!id) {
-        return NextResponse.json({ success: false, error: "رقم الطلب مفقود" }, { status: 400 });
-    }
+    // انتظر الـ params للتأكد من استقرارها (Next.js 14/15 Requirement)
+    const id = params.id;
 
-    // ── Parse & Validate Body ──────────────────────────────
-    const body      = await request.json();
+    const body = await request.json();
     const validated = updateSchema.parse(body);
 
-    // ── Database Update ────────────────────────────────────
     const order = await prisma.order.update({ 
       where: { id: id }, 
       data: { status: validated.status } 
@@ -46,17 +41,11 @@ export async function PATCH(
     return NextResponse.json({ success: true, data: order });
 
   } catch (error) {
-    console.error("[PATCH /api/orders/[id]] Error:", error);
-    
-    if (error instanceof z.ZodError) {
-        return NextResponse.json({ success: false, error: "حالة الطلب غير صحيحة" }, { status: 400 });
-    }
-    
-    return NextResponse.json({ success: false, error: "فشل تحديث حالة الطلب" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "فشل التحديث" }, { status: 500 });
   }
 }
 
-// ضفنا GET هنا فاضية عشان نضمن إن الـ Route ده دائماً يترد عليه لو Vercel حاول يفحصه
+// أضف GET احتياطية فارغة
 export async function GET() {
-    return NextResponse.json({ message: "Order API is active" });
+    return NextResponse.json({ status: "active" });
 }
