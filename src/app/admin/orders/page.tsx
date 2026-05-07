@@ -12,7 +12,14 @@ export const revalidate = 0;
 
 async function getOrders() {
   try {
-    return await prisma.order.findMany({ orderBy: { createdAt: "desc" } });
+    return await prisma.order.findMany({ 
+      include: { 
+        items: {
+          include: { product: true }
+        }
+      },
+      orderBy: { createdAt: "desc" } 
+    });
   } catch { return []; }
 }
 
@@ -57,8 +64,7 @@ export default async function AdminOrdersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-silver-50">
-                {orders.map((order) => {
-                  const items = order.items as Array<{ nameAr: string; quantity: number }>;
+                {orders.map((order: any) => {
                   return (
                     <tr key={order.id} className="hover:bg-silver-50/50 transition-colors">
                       <td className="px-4 py-3">
@@ -77,8 +83,8 @@ export default async function AdminOrdersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <p className="text-silver-700 text-xs leading-relaxed max-w-[180px]">
-                          {items.slice(0, 2).map((item) => `${item.nameAr} (${item.quantity})`).join("، ")}
-                          {items.length > 2 && ` و${items.length - 2} أخرى`}
+                          {order.items.slice(0, 2).map((item: any) => `${item.product.nameAr} (${item.quantity})`).join("، ")}
+                          {order.items.length > 2 && ` و${order.items.length - 2} أخرى`}
                         </p>
                       </td>
                       <td className="px-4 py-3">
