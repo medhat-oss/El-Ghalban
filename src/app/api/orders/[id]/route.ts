@@ -6,7 +6,12 @@ import { z } from "zod";
 
 // أهم سطرين لـ Vercel
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 export const revalidate = 0;
+
+export async function generateStaticParams() {
+  return [];
+}
 
 const validStatuses = ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"] as const;
 const updateSchema = z.object({
@@ -20,8 +25,13 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
     const params = await context.params;
     const id = params.id;
 
-    if (!id) {
-      return NextResponse.json({ success: false, error: "ID مفقود" }, { status: 400 });
+    if (!id || id === '[id]') {
+      return NextResponse.json({ success: false, error: "ID مفقود أو غير صالح" }, { status: 400 });
+    }
+
+    // Execution guard: Don't run Prisma if it's a build worker probe
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      return NextResponse.json({ success: true, message: "Build probe skipped" });
     }
 
     // التحقق من الأدمن
@@ -47,6 +57,15 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
 }
 
 // ضيف الدالة دي كـ "تمويه" لـ Next.js عشان يتأكد إن المسار ديناميكي
-export async function GET(request: NextRequest) {
-  return NextResponse.json({ message: "API is Dynamic" });
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  try {
+    const params = await context.params;
+    const id = params.id;
+    if (!id || id === '[id]' || process.env.NEXT_PHASE === 'phase-production-build') {
+      return NextResponse.json({ message: "API is Dynamic - build probe skipped" });
+    }
+    return NextResponse.json({ message: "API is Dynamic", id });
+  } catch {
+    return NextResponse.json({ message: "API is Dynamic" });
+  }
 }
