@@ -45,7 +45,13 @@ export async function POST(request: NextRequest) {
         address:         validated.address,
         city:            validated.city,
         notes:           validated.notes,
-        items:           validated.items,
+        items: {
+          create: validated.items.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
         subtotal:        validated.subtotal,
         deliveryFee:     validated.deliveryFee,
         total:           validated.total,

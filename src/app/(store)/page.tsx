@@ -52,7 +52,7 @@ export default async function HomePage() {
   const WHATSAPP = process.env.NEXT_PUBLIC_STORE_WHATSAPP ?? "201000000000";
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-slate-900 transition-colors duration-300">
 
       {/* ════════════════════════════════════════════════════
           HERO SECTION
@@ -174,8 +174,8 @@ export default async function HomePage() {
             <Link
               key={href}
               href={href}
-              className={`${bg} rounded-2xl p-6 flex flex-col items-center text-center
-                          border border-transparent hover:border-sky-200
+              className={`${bg} dark:bg-slate-800 dark:border-slate-700 rounded-2xl p-6 flex flex-col items-center text-center
+                          border border-transparent hover:border-sky-200 dark:hover:border-sky-500
                           transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group`}
             >
               <div className={`w-16 h-16 bg-gradient-to-br ${color} rounded-2xl
@@ -183,9 +183,9 @@ export default async function HomePage() {
                                group-hover:scale-110 transition-transform duration-300`}>
                 <Icon size={30} className="text-white" />
               </div>
-              <h3 className={`font-black text-xl ${text}`}>{title}</h3>
-              <p className="text-silver-500 text-sm mt-1">{desc}</p>
-              <span className={`mt-3 ${text} text-sm font-bold flex items-center gap-1
+              <h3 className={`font-black text-xl ${text} dark:text-sky-400`}>{title}</h3>
+              <p className="text-silver-500 dark:text-slate-300 text-sm mt-1">{desc}</p>
+              <span className={`mt-3 ${text} dark:text-sky-400 text-sm font-bold flex items-center gap-1
                                 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
                 تصفح الآن <ArrowLeft size={14} className="rotate-180" />
               </span>
@@ -198,7 +198,7 @@ export default async function HomePage() {
           FEATURED PRODUCTS
           ════════════════════════════════════════════════════ */}
       {featuredProducts.length > 0 && (
-        <section className="py-10 bg-silver-50">
+        <section className="py-10 bg-silver-50 dark:bg-slate-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -278,7 +278,7 @@ export default async function HomePage() {
       {/* ════════════════════════════════════════════════════
           WHY US SECTION
           ════════════════════════════════════════════════════ */}
-      <section className="py-12 bg-silver-50">
+      <section className="py-12 bg-silver-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="section-title text-center">لماذا الغلبان؟ 🏆</h2>
           <p className="section-subtitle text-center">نفخر بتقديم أفضل تجربة تسوق</p>
@@ -292,8 +292,8 @@ export default async function HomePage() {
               <div key={title} className="card p-6 flex flex-col items-center text-center
                                          card-lift">
                 <span className="text-4xl mb-3">{icon}</span>
-                <h3 className="font-black text-silver-800 text-base">{title}</h3>
-                <p className="text-silver-400 text-sm mt-1">{desc}</p>
+                <h3 className="font-black text-silver-800 dark:text-slate-100 text-base">{title}</h3>
+                <p className="text-silver-400 dark:text-slate-300 text-sm mt-1">{desc}</p>
               </div>
             ))}
           </div>
@@ -305,12 +305,12 @@ export default async function HomePage() {
           ════════════════════════════════════════════════════ */}
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6
-                        bg-green-50 border border-green-200 rounded-3xl p-8">
+                        bg-green-50 dark:bg-slate-800 border border-green-200 dark:border-slate-700 rounded-3xl p-8">
           <div>
-            <h3 className="font-black text-silver-900 text-xl md:text-2xl">
+            <h3 className="font-black text-silver-900 dark:text-slate-100 text-xl md:text-2xl">
               تحتاج مساعدة؟ نحن هنا! 💬
             </h3>
-            <p className="text-silver-500 mt-2">
+            <p className="text-silver-500 dark:text-slate-300 mt-2">
               تواصل معنا مباشرة على واتساب لأي استفسار أو طلب خاص.
             </p>
           </div>

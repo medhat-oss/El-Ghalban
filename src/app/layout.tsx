@@ -7,6 +7,7 @@ import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/context/CartContext";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -48,10 +49,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={cairo.variable}>
-      <body className="font-cairo antialiased bg-white text-silver-900">
-        <CartProvider>
-          {children}
+    <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
+      <body className="font-cairo antialiased bg-white text-silver-900 dark:bg-silver-900 dark:text-silver-50 transition-colors duration-300">
+        <ThemeProvider>
+          <CartProvider>
+            {children}
           <Toaster
             position="bottom-center"
             toastOptions={{
@@ -75,6 +77,7 @@ export default function RootLayout({
             }}
           />
         </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

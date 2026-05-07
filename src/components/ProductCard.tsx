@@ -51,7 +51,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       aria-label={product.nameAr}
     >
       {/* ── Product Image ───────────────────────────────────── */}
-      <div className="relative img-zoom-wrap bg-silver-50 aspect-square">
+      <div className="relative img-zoom-wrap bg-silver-50 dark:bg-silver-800/50 aspect-square">
         <Image
           src={primaryImage}
           alt={product.nameAr}
@@ -80,8 +80,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Brand pill */}
         {product.brand && (
           <div className="absolute bottom-2 end-2">
-            <span className="bg-white/90 backdrop-blur-sm border border-silver-200
-                             text-silver-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+            <span className="bg-white/90 dark:bg-silver-900/90 backdrop-blur-sm border border-silver-200 dark:border-silver-700
+                             text-silver-600 dark:text-silver-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
               {product.brand}
             </span>
           </div>
@@ -96,25 +96,25 @@ export default function ProductCard({ product }: ProductCardProps) {
         </span>
 
         {/* Name */}
-        <h3 className="font-bold text-silver-800 text-sm sm:text-base line-clamp-2 leading-snug flex-1">
+        <h3 className="font-bold text-silver-800 dark:text-silver-100 text-sm sm:text-base line-clamp-2 leading-snug flex-1">
           {product.nameAr}
         </h3>
 
         {/* Description */}
         {product.descriptionAr && (
-          <p className="text-silver-400 text-xs line-clamp-2 leading-relaxed">
+          <p className="text-silver-400 dark:text-silver-300 text-xs line-clamp-2 leading-relaxed">
             {product.descriptionAr}
           </p>
         )}
 
         {/* Price */}
         <div className="flex items-center gap-2 mt-auto pt-2">
-          <span className="text-sky-600 font-black text-lg price-tag">
+          <span className="text-sky-600 dark:text-sky-400 font-black text-lg price-tag">
             {product.price.toFixed(2)}
-            <span className="text-xs font-semibold text-silver-400 me-1"> ج.م</span>
+            <span className="text-xs font-semibold text-silver-400 dark:text-silver-500 me-1"> ج.م</span>
           </span>
           {hasDiscount && (
-            <span className="text-silver-400 text-xs line-through price-tag">
+            <span className="text-silver-400 dark:text-silver-500 text-xs line-through price-tag">
               {product.oldPrice!.toFixed(2)} ج.م
             </span>
           )}
@@ -129,7 +129,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                       py-2.5 rounded-xl text-sm font-bold
                       transition-all duration-300 mt-1
                       ${!product.isAvailable
-                        ? "bg-silver-100 text-silver-400 cursor-not-allowed"
+                        ? "bg-silver-100 dark:bg-silver-800 text-silver-400 dark:text-silver-500 cursor-not-allowed"
                         : added
                           ? "bg-green-500 text-white shadow-none scale-95"
                           : "btn-primary"

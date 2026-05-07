@@ -31,9 +31,10 @@ const updateProductSchema = z.object({
 // ─── GET /api/products/[id] ─────────────────────────────────
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const product = await prisma.product.findUnique({
       where:   { id: params.id },
       include: { category: true },
@@ -59,9 +60,10 @@ export async function GET(
 // ─── PATCH /api/products/[id] ───────────────────────────────
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== "admin") {
       return NextResponse.json(
@@ -118,9 +120,10 @@ export async function PATCH(
 // ─── DELETE /api/products/[id] ──────────────────────────────
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== "admin") {
       return NextResponse.json(

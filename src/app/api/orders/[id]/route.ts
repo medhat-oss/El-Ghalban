@@ -13,8 +13,8 @@ const updateSchema = z.object({
   status: z.enum(validStatuses),
 });
 
-// استخدمنا context: any عشان نهرب من تدقيق Next.js وقت الـ Build
-export async function PATCH(request: NextRequest, context: any) {
+// استخدمنا context بالـ type الصحيح لـ Next.js 15
+export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     // تأكد إننا بننتظر الـ params لأنها في النسخ الجديدة بقت Promise
     const params = await context.params;
