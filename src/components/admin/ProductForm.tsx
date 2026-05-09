@@ -199,6 +199,13 @@ export default function ProductForm({ initialData, categories, productId, mode }
           {renderField("السعر القديم", "oldPrice", "number", "0.00")}
           {renderField("الكمية", "stock", "number", "0")}
         </div>
+        {form.oldPrice != null && form.oldPrice > 0 && form.oldPrice <= form.price && (
+          <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl">
+            <p className="text-red-600 dark:text-red-400 text-sm font-bold flex items-center gap-2">
+              ⚠️ تنبيه: السعر القديم يجب أن يكون أكبر من سعر البيع ليظهر الخصم بشكل صحيح.
+            </p>
+          </div>
+        )}
       </Section>
 
       {/* ── القسم 4: الصور ── */}
