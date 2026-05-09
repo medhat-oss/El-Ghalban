@@ -35,12 +35,12 @@ const DEFAULT_FORM: ProductFormData = {
 
 // ── 1. نقل الـ Section ليكون خارج المكون (لمنع التقل) ──
 const Section = ({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) => (
-  <div className="bg-white rounded-2xl border border-silver-100 shadow-card p-6">
-    <div className="flex items-center gap-2 mb-5 pb-4 border-b border-silver-100">
-      <div className="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center">
-        <Icon size={16} className="text-sky-600" />
+  <div className="bg-white dark:bg-[#0f172a] rounded-2xl border border-silver-100 dark:border-slate-800 shadow-card p-6">
+    <div className="flex items-center gap-2 mb-5 pb-4 border-b border-silver-100 dark:border-slate-800">
+      <div className="w-8 h-8 bg-sky-100 dark:bg-sky-500/20 rounded-lg flex items-center justify-center">
+        <Icon size={16} className="text-sky-600 dark:text-sky-400" />
       </div>
-      <h3 className="font-black text-silver-800">{title}</h3>
+      <h3 className="font-black text-silver-800 dark:text-slate-100">{title}</h3>
     </div>
     {children}
   </div>
@@ -123,7 +123,7 @@ export default function ProductForm({ initialData, categories, productId, mode }
   // ── 2. نقل الـ Field ليكون داخل المكون لكن بتعريف ثابت ──
   const renderField = (label: string, keyName: keyof ProductFormData, type = "text", placeholder = "") => (
     <div>
-      <label className="block text-sm font-bold text-silver-700 mb-1.5">{label}</label>
+      <label className="block text-sm font-bold text-silver-700 dark:text-slate-300 mb-1.5">{label}</label>
       <input
         type={type}
         value={form[keyName] === null ? "" : ((form[keyName] as string | number) ?? "")}
@@ -153,7 +153,7 @@ export default function ProductForm({ initialData, categories, productId, mode }
           {renderField("الاسم بالعربية *", "nameAr", "text", "مثال: آيفون 15 برو")}
           {renderField("الاسم بالإنجليزية *", "name", "text", "e.g. iPhone 15 Pro")}
           <div className="md:col-span-2">
-            <label className="block text-sm font-bold text-silver-700 mb-1.5">وصف المنتج (عربي)</label>
+            <label className="block text-sm font-bold text-silver-700 dark:text-slate-300 mb-1.5">وصف المنتج (عربي)</label>
             <textarea
               value={form.descriptionAr ?? ""}
               onChange={(e) => setField("descriptionAr", e.target.value)}
@@ -162,7 +162,7 @@ export default function ProductForm({ initialData, categories, productId, mode }
             />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-bold text-silver-700 mb-1.5">وصف المنتج (English)</label>
+            <label className="block text-sm font-bold text-silver-700 dark:text-slate-300 mb-1.5">وصف المنتج (English)</label>
             <textarea
               value={form.description ?? ""}
               onChange={(e) => setField("description", e.target.value)}
@@ -177,7 +177,7 @@ export default function ProductForm({ initialData, categories, productId, mode }
       <Section icon={Tag} title="التصنيف والماركة">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-bold text-silver-700 mb-1.5">الفئة *</label>
+            <label className="block text-sm font-bold text-silver-700 dark:text-slate-300 mb-1.5">الفئة *</label>
             <select
               value={form.categoryId}
               onChange={(e) => setField("categoryId", e.target.value)}
@@ -208,8 +208,8 @@ export default function ProductForm({ initialData, categories, productId, mode }
           className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${uploading ? "opacity-50" : "hover:bg-sky-50"}`}
         >
           <input ref={fileInputRef} type="file" multiple className="hidden" onChange={(e) => Array.from(e.target.files ?? []).forEach(uploadImage)} />
-          <Upload size={32} className="mx-auto text-silver-300 mb-3" />
-          <p className="font-bold text-silver-600">اسحب الصور هنا أو انقر للاختيار</p>
+          <Upload size={32} className="mx-auto text-silver-300 dark:text-slate-500 mb-3" />
+          <p className="font-bold text-silver-600 dark:text-slate-300">اسحب الصور هنا أو انقر للاختيار</p>
         </div>
         <div className="grid grid-cols-5 gap-3 mt-4">
           {form.images.map((url, index) => (
@@ -224,13 +224,13 @@ export default function ProductForm({ initialData, categories, productId, mode }
       {/* ── القسم 5: إعدادات الظهور ── */}
       <Section icon={Eye} title="إعدادات الظهور">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <label className="flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer">
-            <input type="checkbox" checked={form.isAvailable} onChange={(e) => setField("isAvailable", e.target.checked)} className="w-5 h-5" />
-            <div><p className="font-bold">متاح للبيع</p></div>
+          <label className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 cursor-pointer">
+            <input type="checkbox" checked={form.isAvailable} onChange={(e) => setField("isAvailable", e.target.checked)} className="w-5 h-5 flex-shrink-0" />
+            <div><p className="font-bold text-gray-900 dark:text-slate-100">متاح للبيع</p></div>
           </label>
-          <label className="flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer">
-            <input type="checkbox" checked={form.isFeatured} onChange={(e) => setField("isFeatured", e.target.checked)} className="w-5 h-5" />
-            <div><p className="font-bold">منتج مميز ⭐</p></div>
+          <label className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 cursor-pointer">
+            <input type="checkbox" checked={form.isFeatured} onChange={(e) => setField("isFeatured", e.target.checked)} className="w-5 h-5 flex-shrink-0" />
+            <div><p className="font-bold text-gray-900 dark:text-slate-100">منتج مميز ⭐</p></div>
           </label>
         </div>
       </Section>
