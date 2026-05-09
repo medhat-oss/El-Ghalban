@@ -45,24 +45,24 @@ export default function AccessoriesFilter({ currentMin, currentMax, currentSort,
   const hasActive = Boolean(currentMin || currentMax || (currentSort && currentSort !== "newest"));
 
   return (
-    <div className="bg-white rounded-2xl shadow-card border border-silver-100">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-silver-100 dark:border-slate-700">
       <button
         className="w-full flex items-center justify-between p-4"
         onClick={() => setIsOpen((v) => !v)}
       >
-        <div className="flex items-center gap-2 font-black text-silver-800">
+        <div className="flex items-center gap-2 font-black text-silver-800 dark:text-slate-100">
           <SlidersHorizontal size={18} className="text-violet-500" />
           تصفية
           {hasActive && <span className="w-2 h-2 rounded-full bg-violet-500" />}
         </div>
-        <ChevronDown size={18} className={`text-silver-400 transition-transform lg:hidden ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown size={18} className={`text-silver-400 dark:text-slate-400 transition-transform lg:hidden ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <div className={`overflow-hidden transition-all duration-300 lg:!max-h-none lg:!opacity-100
                        ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="px-4 pb-4 space-y-4 border-t border-silver-100 pt-4">
+        <div className="px-4 pb-4 space-y-4 border-t border-silver-100 dark:border-slate-700 pt-4">
           <div>
-            <label className="block text-xs font-bold text-silver-500 uppercase tracking-wide mb-2">ترتيب</label>
+            <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">ترتيب</label>
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="input-field py-2 text-sm">
               {SORT_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
@@ -70,10 +70,10 @@ export default function AccessoriesFilter({ currentMin, currentMax, currentSort,
             </select>
           </div>
           <div>
-            <label className="block text-xs font-bold text-silver-500 uppercase tracking-wide mb-2">نطاق السعر (ج.م)</label>
+            <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">نطاق السعر (ج.م)</label>
             <div className="flex items-center gap-2">
               <input type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} placeholder="من" min="0" className="input-field py-2 text-sm text-center" />
-              <span className="text-silver-400 flex-shrink-0">—</span>
+              <span className="text-silver-400 dark:text-slate-400 flex-shrink-0">—</span>
               <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} placeholder="إلى" min="0" className="input-field py-2 text-sm text-center" />
             </div>
           </div>

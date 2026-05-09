@@ -92,8 +92,8 @@ export default async function AdminDashboardPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-silver-900">لوحة التحكم 📊</h1>
-          <p className="text-silver-500 text-sm mt-1">مرحباً بك في لوحة إدارة الغلبان</p>
+          <h1 className="text-2xl font-black text-silver-900 dark:text-slate-100">لوحة التحكم 📊</h1>
+          <p className="text-silver-500 dark:text-slate-400 text-sm mt-1">مرحباً بك في لوحة إدارة الغلبان</p>
         </div>
         <Link href="/admin/products/new" className="btn-primary flex items-center gap-2 text-sm">
           <PlusCircle size={18} />
@@ -135,14 +135,14 @@ export default async function AdminDashboardPage() {
         ].map(({ label, value, sub, icon: Icon, color }) => (
           <div
             key={label}
-            className="bg-white rounded-2xl p-5 border border-silver-100 shadow-card"
+            className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-silver-100 dark:border-slate-700 shadow-card"
           >
             <div className={`w-11 h-11 rounded-xl bg-${color}-100 flex items-center justify-center mb-3`}>
               <Icon size={22} className={`text-${color}-600`} />
             </div>
-            <p className="text-2xl font-black text-silver-900">{value}</p>
-            <p className="text-sm font-bold text-silver-700 mt-0.5">{label}</p>
-            <p className="text-xs text-silver-400 mt-0.5">{sub}</p>
+            <p className="text-2xl font-black text-silver-900 dark:text-white">{value}</p>
+            <p className="text-sm font-bold text-silver-700 dark:text-slate-300 mt-0.5">{label}</p>
+            <p className="text-xs text-silver-400 dark:text-slate-400 mt-0.5">{sub}</p>
           </div>
         ))}
       </div>
@@ -150,21 +150,40 @@ export default async function AdminDashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { href: "/admin/products/new", icon: PlusCircle,  label: "إضافة منتج جديد",    color: "sky" },
-          { href: "/admin/products",     icon: Package,      label: "إدارة المنتجات",      color: "violet" },
-          { href: "/admin/orders",       icon: ShoppingBag,  label: "عرض الطلبات",         color: "emerald" },
-        ].map(({ href, icon: Icon, label, color }) => (
+          { 
+            href: "/admin/products/new", 
+            icon: PlusCircle,  
+            label: "إضافة منتج جديد",    
+            wrapperClass: "bg-transparent border border-blue-500/50 dark:bg-blue-500/10 hover:border-blue-500 dark:hover:bg-blue-500/20",
+            iconBgClass: "bg-blue-100 dark:bg-transparent",
+            textClass: "text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300" 
+          },
+          { 
+            href: "/admin/products",     
+            icon: Package,      
+            label: "إدارة المنتجات",      
+            wrapperClass: "bg-transparent border border-purple-500/50 dark:bg-purple-500/10 hover:border-purple-500 dark:hover:bg-purple-500/20",
+            iconBgClass: "bg-purple-100 dark:bg-transparent",
+            textClass: "text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300" 
+          },
+          { 
+            href: "/admin/orders",       
+            icon: ShoppingBag,  
+            label: "عرض الطلبات",         
+            wrapperClass: "bg-transparent border border-emerald-500/50 dark:bg-emerald-500/10 hover:border-emerald-500 dark:hover:bg-emerald-500/20",
+            iconBgClass: "bg-emerald-100 dark:bg-transparent",
+            textClass: "text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" 
+          },
+        ].map(({ href, icon: Icon, label, wrapperClass, iconBgClass, textClass }) => (
           <Link
             key={href}
             href={href}
-            className={`flex items-center gap-3 bg-${color}-50 border-2 border-${color}-200
-                         hover:border-${color}-400 rounded-2xl p-4
-                         transition-all duration-200 hover:shadow-md group`}
+            className={`flex items-center gap-3 rounded-2xl p-4 transition-all duration-200 hover:shadow-md group ${wrapperClass}`}
           >
-            <div className={`w-10 h-10 bg-${color}-100 rounded-xl flex items-center justify-center`}>
-              <Icon size={20} className={`text-${color}-600`} />
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBgClass}`}>
+              <Icon size={20} className={textClass} />
             </div>
-            <span className={`font-bold text-${color}-700 group-hover:text-${color}-800`}>{label}</span>
+            <span className={`font-bold ${textClass}`}>{label}</span>
           </Link>
         ))}
       </div>
@@ -173,9 +192,9 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Latest Orders */}
-        <div className="bg-white rounded-2xl shadow-card border border-silver-100 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-silver-100">
-            <h2 className="font-black text-silver-800">آخر الطلبات</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-silver-100 dark:border-slate-700 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-silver-100 dark:border-slate-700">
+            <h2 className="font-black text-silver-800 dark:text-slate-100">آخر الطلبات</h2>
             <Link href="/admin/orders" className="text-sky-500 hover:text-sky-700 text-sm font-bold flex items-center gap-1">
               <Eye size={14} /> عرض الكل
             </Link>
@@ -183,14 +202,14 @@ export default async function AdminDashboardPage() {
           {stats.latestOrders.length === 0 ? (
             <p className="text-silver-400 text-sm text-center py-8">لا توجد طلبات بعد</p>
           ) : (
-            <div className="divide-y divide-silver-50">
+            <div className="divide-y divide-silver-50 dark:divide-slate-700">
               {stats.latestOrders.map((order) => {
-                const statusInfo = STATUS_MAP[order.status] ?? { label: order.status, class: "bg-silver-100 text-silver-600" };
+                const statusInfo = STATUS_MAP[order.status] ?? { label: order.status, class: "bg-silver-100 text-silver-600 dark:bg-slate-700 dark:text-slate-300" };
                 return (
                   <div key={order.id} className="px-5 py-3 flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-silver-800 text-sm">{order.customerName}</p>
-                      <p className="text-silver-400 text-xs">{order.phone}</p>
+                      <p className="font-bold text-silver-800 dark:text-slate-100 text-sm">{order.customerName}</p>
+                      <p className="text-silver-400 dark:text-slate-400 text-xs">{order.phone}</p>
                     </div>
                     <div className="text-end">
                       <span className={`inline-block text-xs font-bold px-2.5 py-1 rounded-full ${statusInfo.class}`}>
@@ -206,9 +225,9 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Latest Products */}
-        <div className="bg-white rounded-2xl shadow-card border border-silver-100 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-silver-100">
-            <h2 className="font-black text-silver-800">آخر المنتجات</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-silver-100 dark:border-slate-700 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-silver-100 dark:border-slate-700">
+            <h2 className="font-black text-silver-800 dark:text-slate-100">آخر المنتجات</h2>
             <Link href="/admin/products" className="text-sky-500 hover:text-sky-700 text-sm font-bold flex items-center gap-1">
               <Eye size={14} /> إدارة الكل
             </Link>
@@ -216,12 +235,12 @@ export default async function AdminDashboardPage() {
           {stats.latestProducts.length === 0 ? (
             <p className="text-silver-400 text-sm text-center py-8">لا توجد منتجات بعد</p>
           ) : (
-            <div className="divide-y divide-silver-50">
+            <div className="divide-y divide-silver-50 dark:divide-slate-700">
               {stats.latestProducts.map((product) => (
                 <div key={product.id} className="px-5 py-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-bold text-silver-800 text-sm truncate">{product.nameAr}</p>
-                    <p className="text-silver-400 text-xs">{(product as { category: { nameAr: string } }).category.nameAr}</p>
+                    <p className="font-bold text-silver-800 dark:text-slate-100 text-sm truncate">{product.nameAr}</p>
+                    <p className="text-silver-400 dark:text-slate-400 text-xs">{(product as { category: { nameAr: string } }).category.nameAr}</p>
                   </div>
                   <div className="text-end flex-shrink-0">
                     <p className="text-sky-600 font-black text-sm">{product.price.toFixed(2)} ج.م</p>

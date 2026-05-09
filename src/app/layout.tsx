@@ -50,7 +50,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
-      <body className="font-cairo antialiased bg-white text-silver-900 dark:bg-silver-900 dark:text-silver-50 transition-colors duration-300">
+      <body className="font-cairo antialiased bg-white text-silver-900 dark:bg-[#0f172a] dark:text-slate-100 transition-colors duration-300">
         <ThemeProvider>
           <CartProvider>
             {children}

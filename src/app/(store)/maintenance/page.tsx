@@ -89,7 +89,7 @@ export default function MaintenancePage() {
   );
 
   return (
-    <div className="min-h-screen bg-silver-50">
+    <div className="min-h-screen bg-silver-50 dark:bg-[#0f172a]">
       {/* ── Header ─────────────────────────────────────────── */}
       <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,8 +119,8 @@ export default function MaintenancePage() {
           ].map(({ icon: Icon, label, value }, i) => (
             <div key={i} className="card p-4 text-center">
               <Icon size={28} className="text-emerald-500 mx-auto mb-2" />
-              <p className="font-black text-silver-800 text-lg">{value}</p>
-              <p className="text-silver-400 text-xs mt-0.5">{label}</p>
+              <p className="font-black text-silver-800 dark:text-slate-100 text-lg">{value}</p>
+              <p className="text-silver-400 dark:text-slate-300 text-xs mt-0.5">{label}</p>
             </div>
           ))}
         </div>
@@ -136,8 +136,8 @@ export default function MaintenancePage() {
                   <Icon size={22} className="text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-silver-800">{title}</h3>
-                  <p className="text-silver-500 text-xs mt-1 leading-relaxed">{desc}</p>
+                  <h3 className="font-bold text-silver-800 dark:text-slate-100">{title}</h3>
+                  <p className="text-silver-500 dark:text-slate-300 text-xs mt-1 leading-relaxed">{desc}</p>
                   <span className="inline-block mt-2 text-emerald-600 font-black text-sm bg-emerald-50 px-2 py-0.5 rounded-lg">
                     {price}
                   </span>
@@ -158,8 +158,8 @@ export default function MaintenancePage() {
                   <Icon size={22} className="text-sky-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-silver-800">{title}</h3>
-                  <p className="text-silver-500 text-xs mt-1 leading-relaxed">{desc}</p>
+                  <h3 className="font-bold text-silver-800 dark:text-slate-100">{title}</h3>
+                  <p className="text-silver-500 dark:text-slate-300 text-xs mt-1 leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}
@@ -187,8 +187,8 @@ export default function MaintenancePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact Form */}
           <div className="card p-6">
-            <h2 className="font-black text-silver-900 text-xl mb-1">احجز موعد صيانة 📅</h2>
-            <p className="text-silver-400 text-sm mb-6">أرسل تفاصيل جهازك وسنتواصل معك فوراً</p>
+            <h2 className="font-black text-silver-900 dark:text-slate-100 text-xl mb-1">احجز موعد صيانة 📅</h2>
+            <p className="text-silver-400 dark:text-slate-300 text-sm mb-6">أرسل تفاصيل جهازك وسنتواصل معك فوراً</p>
 
             {submitted ? (
               <div className="flex flex-col items-center justify-center py-10 text-center gap-4">
@@ -251,14 +251,14 @@ export default function MaintenancePage() {
             </div>
 
             <div className="card p-6">
-              <h3 className="font-black text-silver-800 mb-3">أوقات العمل 🕐</h3>
+              <h3 className="font-black text-silver-800 dark:text-slate-100 mb-3">أوقات العمل 🕐</h3>
               <div className="space-y-2">
                 {[
                   { day: "السبت — الخميس", time: "10 صباحاً — 10 مساءً" },
                   { day: "الجمعة",          time: "2 ظهراً — 10 مساءً" },
                 ].map(({ day, time }) => (
                   <div key={day} className="flex justify-between items-center text-sm">
-                    <span className="font-bold text-silver-700">{day}</span>
+                    <span className="font-bold text-silver-700 dark:text-slate-100">{day}</span>
                     <span className="text-sky-600 font-bold bg-sky-50 px-3 py-1 rounded-lg">{time}</span>
                   </div>
                 ))}

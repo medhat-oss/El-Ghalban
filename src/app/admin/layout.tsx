@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   */
   if (!session || session.user?.role !== "admin") {
     return (
-      <div className="min-h-screen bg-silver-100" dir="rtl">
+      <div className="min-h-screen bg-silver-100 dark:bg-[#0f172a]" dir="rtl">
         {children}
         <Toaster position="bottom-center" />
       </div>
@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   // لو المستخدم أدمن ومسجل دخول، اعرض الشكل الكامل للوحة التحكم
   return (
-    <div className="min-h-screen bg-silver-100 flex" dir="rtl">
+    <div className="min-h-screen bg-silver-100 dark:bg-[#0f172a] flex" dir="rtl">
       {/* Sidebar */}
       <AdminSidebar adminName={session.user?.name ?? "المدير"} />
 

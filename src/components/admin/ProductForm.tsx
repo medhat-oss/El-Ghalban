@@ -126,8 +126,18 @@ export default function ProductForm({ initialData, categories, productId, mode }
       <label className="block text-sm font-bold text-silver-700 mb-1.5">{label}</label>
       <input
         type={type}
-        value={(form[keyName] as string | number) ?? ""}
-        onChange={(e) => setField(keyName, type === "number" ? parseFloat(e.target.value) || 0 : e.target.value)}
+        value={form[keyName] === null ? "" : ((form[keyName] as string | number) ?? "")}
+        onChange={(e) => {
+          let val: any = e.target.value;
+          if (type === "number") {
+            if (val === "") {
+              val = keyName === "oldPrice" ? null : 0;
+            } else {
+              val = parseFloat(val) || 0;
+            }
+          }
+          setField(keyName, val);
+        }}
         placeholder={placeholder}
         className={`input-field ${errors[keyName] ? "border-red-400" : ""}`}
       />

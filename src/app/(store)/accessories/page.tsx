@@ -75,7 +75,7 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
   const currentSub = searchParams.sub ?? "";
 
   return (
-    <div className="min-h-screen bg-silver-50">
+    <div className="min-h-screen bg-silver-50 dark:bg-[#0f172a]">
       {/* ── Page Header ────────────────────────────────────── */}
       <div className="bg-gradient-to-r from-violet-600 to-violet-800 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -94,7 +94,7 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
       </div>
 
       {/* ── Subcategory Tabs ───────────────────────────────── */}
-      <div className="bg-white border-b border-silver-100 sticky top-16 z-30">
+      <div className="bg-white dark:bg-[#0f172a] border-b border-silver-100 dark:border-slate-800 sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
             {SUBCATEGORIES.map(({ value, label, emoji }) => {
@@ -108,10 +108,10 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
                   href={`/accessories?${params.toString()}`}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold
                               whitespace-nowrap transition-all duration-200 flex-shrink-0
-                              ${currentSub === value
-                                ? "bg-violet-600 text-white shadow-md"
-                                : "bg-silver-100 text-silver-600 hover:bg-violet-50 hover:text-violet-600"
-                              }`}
+                                ${currentSub === value
+                                  ? "bg-violet-600 text-white shadow-md"
+                                  : "bg-silver-100 text-silver-600 dark:bg-slate-800 dark:text-slate-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/50 dark:hover:text-violet-400"
+                                }`}
                 >
                   <span>{emoji}</span>
                   {label}
@@ -140,9 +140,9 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
           <div className="flex-1">
             {products.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
-                <Headphones size={60} className="text-silver-200 mb-4" />
-                <h3 className="font-black text-silver-600 text-xl">لا توجد إكسسوارات</h3>
-                <p className="text-silver-400 mt-2">جرّب تغيير معايير الفلتر</p>
+                <Headphones size={60} className="text-silver-200 dark:text-slate-700 mb-4" />
+                <h3 className="font-black text-silver-600 dark:text-slate-100 text-xl">لا توجد إكسسوارات</h3>
+                <p className="text-silver-400 dark:text-slate-400 mt-2">جرّب تغيير معايير الفلتر</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">

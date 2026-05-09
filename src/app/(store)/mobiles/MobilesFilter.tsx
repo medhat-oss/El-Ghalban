@@ -56,13 +56,13 @@ export default function MobilesFilter({
   const hasActiveFilters = Boolean(currentBrand || currentMin || currentMax || (currentSort && currentSort !== "newest"));
 
   return (
-    <div className="bg-white rounded-2xl shadow-card border border-silver-100">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-silver-100 dark:border-slate-700">
       {/* Header */}
       <button
         className="w-full flex items-center justify-between p-4 lg:cursor-default"
         onClick={() => setIsOpen((v) => !v)}
       >
-        <div className="flex items-center gap-2 font-black text-silver-800">
+        <div className="flex items-center gap-2 font-black text-silver-800 dark:text-slate-100">
           <SlidersHorizontal size={18} className="text-sky-500" />
           تصفية النتائج
           {hasActiveFilters && (
@@ -71,18 +71,18 @@ export default function MobilesFilter({
         </div>
         <ChevronDown
           size={18}
-          className={`text-silver-400 transition-transform lg:hidden ${isOpen ? "rotate-180" : ""}`}
+          className={`text-silver-400 dark:text-slate-400 transition-transform lg:hidden ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {/* Filter Body */}
       <div className={`overflow-hidden transition-all duration-300 lg:!max-h-none lg:!opacity-100
                        ${isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="px-4 pb-4 space-y-5 border-t border-silver-100 pt-4">
+        <div className="px-4 pb-4 space-y-5 border-t border-silver-100 dark:border-slate-700 pt-4">
 
           {/* Sort By */}
           <div>
-            <label className="block text-xs font-bold text-silver-500 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">
               ترتيب حسب
             </label>
             <select
@@ -99,7 +99,7 @@ export default function MobilesFilter({
           {/* Brand Filter */}
           {brands.length > 0 && (
             <div>
-              <label className="block text-xs font-bold text-silver-500 uppercase tracking-wide mb-2">
+              <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">
                 الماركة
               </label>
               <div className="flex flex-wrap gap-2">
@@ -107,8 +107,8 @@ export default function MobilesFilter({
                   onClick={() => setSelectedBrand("")}
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold border-2 transition-all
                               ${selectedBrand === ""
-                                ? "border-sky-500 bg-sky-50 text-sky-600"
-                                : "border-silver-200 text-silver-600 hover:border-sky-300"}`}
+                                ? "border-sky-500 bg-sky-50 text-sky-600 dark:bg-sky-500/20 dark:text-sky-400"
+                                : "border-silver-200 text-silver-600 dark:border-slate-600 dark:text-slate-300 hover:border-sky-300 dark:hover:border-sky-500"}`}
                 >
                   الكل
                 </button>
@@ -118,8 +118,8 @@ export default function MobilesFilter({
                     onClick={() => setSelectedBrand(brand === selectedBrand ? "" : brand)}
                     className={`px-3 py-1.5 rounded-lg text-sm font-semibold border-2 transition-all
                                 ${selectedBrand === brand
-                                  ? "border-sky-500 bg-sky-50 text-sky-600"
-                                  : "border-silver-200 text-silver-600 hover:border-sky-300"}`}
+                                  ? "border-sky-500 bg-sky-50 text-sky-600 dark:bg-sky-500/20 dark:text-sky-400"
+                                  : "border-silver-200 text-silver-600 dark:border-slate-600 dark:text-slate-300 hover:border-sky-300 dark:hover:border-sky-500"}`}
                   >
                     {brand}
                   </button>
@@ -130,7 +130,7 @@ export default function MobilesFilter({
 
           {/* Price Range */}
           <div>
-            <label className="block text-xs font-bold text-silver-500 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">
               نطاق السعر (ج.م)
             </label>
             <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export default function MobilesFilter({
                 min="0"
                 className="input-field py-2 text-sm text-center"
               />
-              <span className="text-silver-400 font-bold flex-shrink-0">—</span>
+              <span className="text-silver-400 dark:text-slate-400 font-bold flex-shrink-0">—</span>
               <input
                 type="number"
                 value={maxPrice}

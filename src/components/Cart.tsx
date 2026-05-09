@@ -57,6 +57,30 @@ export default function Cart() {
     if (!validateCustomer()) return;
     setIsLoading(true);
     try {
+      // 1. Save order to the database
+      const payload = {
+        customerName: customer.name,
+        phone: customer.phone,
+        address: customer.address,
+        city: customer.city,
+        notes: customer.notes,
+        subtotal,
+        deliveryFee: DELIVERY_FEE,
+        total,
+        items,
+      };
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to save order");
+      }
+
+      // 2. Generate WhatsApp URL
       const url = generateWhatsAppUrl(
         { customer, items, subtotal, deliveryFee: DELIVERY_FEE, total },
         process.env.NEXT_PUBLIC_STORE_WHATSAPP
@@ -94,7 +118,7 @@ export default function Cart() {
       <aside
         role="dialog"
         aria-modal="true"
-        className={`fixed inset-y-0 start-0 z-[70] w-full max-w-md bg-white shadow-2xl flex flex-col 
+        className={`fixed inset-y-0 start-0 z-[70] w-full max-w-md bg-white dark:bg-[#0f172a] shadow-2xl flex flex-col 
                     transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
                     ${isOpen ? "translate-x-0" : "translate-x-full"}`} // تصحيح: translate-x-full في الـ RTL بيخرجها يمين
       >
@@ -137,7 +161,7 @@ export default function Cart() {
                       <Image src={item.image} alt={item.nameAr} fill className="object-cover" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-bold text-sm text-gray-800 line-clamp-1">{item.nameAr}</h3>
+                      <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{item.nameAr}</h3>
                       <p className="text-sky-600 font-black mt-1">{item.price} ج.م</p>
                       <div className="flex items-center gap-3 mt-2">
                         <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-8 h-8 border rounded-lg flex items-center justify-center">-</button>
@@ -157,7 +181,7 @@ export default function Cart() {
                <div className="space-y-4">
                   <input 
                     placeholder="الاسم بالكامل" 
-                    className={`w-full p-3 bg-gray-50 border rounded-xl outline-none focus:border-sky-500 ${errors.name ? 'border-red-500' : ''}`}
+                    className={`w-full p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-300 dark:border-slate-700 rounded-xl outline-none focus:border-sky-500 ${errors.name ? 'border-red-500' : ''}`}
                     onChange={(e) => handleFieldChange("name", e.target.value)}
                     value={customer.name}
                   />
@@ -165,14 +189,14 @@ export default function Cart() {
                   
                   <input 
                     placeholder="رقم الموبايل" 
-                    className="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:border-sky-500"
+                    className="w-full p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-300 dark:border-slate-700 rounded-xl outline-none focus:border-sky-500"
                     onChange={(e) => handleFieldChange("phone", e.target.value)}
                     value={customer.phone}
                   />
                   
                   <textarea 
                     placeholder="العنوان بالتفصيل" 
-                    className="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:border-sky-500"
+                    className="w-full p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-300 dark:border-slate-700 rounded-xl outline-none focus:border-sky-500"
                     onChange={(e) => handleFieldChange("address", e.target.value)}
                     value={customer.address}
                   />

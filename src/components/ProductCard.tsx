@@ -20,9 +20,11 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [added, setAdded] = useState(false);
 
   const primaryImage = product.images?.[0] || "/placeholder.png";
-  const hasDiscount  = product.oldPrice && product.oldPrice > product.price;
+  const oldPriceNum  = product.oldPrice != null ? Number(product.oldPrice) : 0;
+  const priceNum     = product.price != null ? Number(product.price) : 0;
+  const hasDiscount  = oldPriceNum > priceNum;
   const discountPct  = hasDiscount
-    ? Math.round(((product.oldPrice! - product.price) / product.oldPrice!) * 100)
+    ? Math.round(((oldPriceNum - priceNum) / oldPriceNum) * 100)
     : 0;
 
   const handleAddToCart = () => {
@@ -115,7 +117,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
           {hasDiscount && (
             <span className="text-silver-400 dark:text-silver-500 text-xs line-through price-tag">
-              {product.oldPrice!.toFixed(2)} ج.م
+              {oldPriceNum.toFixed(2)} ج.م
             </span>
           )}
         </div>

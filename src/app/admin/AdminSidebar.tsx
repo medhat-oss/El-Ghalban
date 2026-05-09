@@ -107,7 +107,7 @@ export default function AdminSidebar({ adminName }: { adminName: string }) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="admin-sidebar hidden lg:flex flex-col w-60 min-h-screen flex-shrink-0">
+      <aside className="hidden lg:flex flex-col w-60 min-h-screen flex-shrink-0 bg-slate-900 dark:bg-[#1e293b] border-e border-slate-800">
         <SidebarContent />
       </aside>
 
@@ -124,7 +124,7 @@ export default function AdminSidebar({ adminName }: { adminName: string }) {
         {open && (
           <>
             <div className="fixed inset-0 bg-black/60 z-40" onClick={() => setOpen(false)} />
-            <aside className="admin-sidebar fixed inset-y-0 start-0 z-50 w-64 flex flex-col">
+            <aside className="fixed inset-y-0 start-0 z-50 w-64 flex flex-col bg-slate-900 dark:bg-[#1e293b] border-e border-slate-800">
               <button
                 onClick={() => setOpen(false)}
                 className="absolute top-4 end-4 text-slate-400 hover:text-white"
