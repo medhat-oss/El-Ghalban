@@ -22,7 +22,7 @@ export interface Product {
   descriptionAr?: string | null;
   price: number;
   oldPrice?: number | null;
-  images: string[];
+  images: { id: string; url: string; isMain: boolean; publicId?: string | null }[];
   isAvailable: boolean;
   isFeatured: boolean;
   stock: number;
@@ -111,7 +111,7 @@ export interface ProductFormData {
   descriptionAr: string;
   price: number;
   oldPrice?: number;
-  images: string[];
+  images: { id?: string; url: string; isMain: boolean; publicId?: string | null }[];
   isAvailable: boolean;
   isFeatured: boolean;
   stock: number;

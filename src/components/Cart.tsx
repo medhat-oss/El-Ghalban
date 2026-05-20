@@ -114,13 +114,13 @@ export default function Cart() {
         aria-hidden="true"
       />
 
-      {/* 2. Panel السلة المصلح */}
+      {/* 2. Panel السلة */}
       <aside
         role="dialog"
         aria-modal="true"
-        className={`fixed inset-y-0 start-0 z-[70] w-full max-w-md bg-white dark:bg-[#0f172a] shadow-2xl flex flex-col 
+        className={`fixed inset-y-0 end-0 z-[70] w-full max-w-md bg-white dark:bg-slate-900 shadow-apple-lg flex flex-col border-s border-slate-200 dark:border-slate-800
                     transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
-                    ${isOpen ? "translate-x-0" : "translate-x-full"}`} // تصحيح: translate-x-full في الـ RTL بيخرجها يمين
+                    ${isOpen ? "translate-x-0" : "ltr:translate-x-full rtl:-translate-x-full"}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
@@ -176,30 +176,32 @@ export default function Cart() {
           )}
 
           {step === "checkout" && (
-            <div className="p-5 space-y-4">
-               {/* الحقول الخاصة ببيانات العميل (نفس الكود بتاعك بس اتأكد من الـ Icons) */}
+            <div className="p-6 space-y-5">
+               {/* الحقول الخاصة ببيانات العميل */}
                <div className="space-y-4">
                   <input 
                     placeholder="الاسم بالكامل" 
-                    className={`w-full p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-300 dark:border-slate-700 rounded-xl outline-none focus:border-sky-500 ${errors.name ? 'border-red-500' : ''}`}
+                    className={`w-full p-4 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 border border-slate-200 dark:border-slate-700/50 rounded-2xl outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all duration-300 ${errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                     onChange={(e) => handleFieldChange("name", e.target.value)}
                     value={customer.name}
                   />
-                  {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
+                  {errors.name && <span className="text-red-500 text-xs px-2">{errors.name}</span>}
                   
                   <input 
                     placeholder="رقم الموبايل" 
-                    className="w-full p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-300 dark:border-slate-700 rounded-xl outline-none focus:border-sky-500"
+                    className={`w-full p-4 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 border border-slate-200 dark:border-slate-700/50 rounded-2xl outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all duration-300 ${errors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                     onChange={(e) => handleFieldChange("phone", e.target.value)}
                     value={customer.phone}
                   />
+                  {errors.phone && <span className="text-red-500 text-xs px-2">{errors.phone}</span>}
                   
                   <textarea 
                     placeholder="العنوان بالتفصيل" 
-                    className="w-full p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-300 dark:border-slate-700 rounded-xl outline-none focus:border-sky-500"
+                    className={`w-full p-4 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 border border-slate-200 dark:border-slate-700/50 rounded-2xl outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all duration-300 min-h-[120px] resize-none ${errors.address ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                     onChange={(e) => handleFieldChange("address", e.target.value)}
                     value={customer.address}
                   />
+                  {errors.address && <span className="text-red-500 text-xs px-2">{errors.address}</span>}
                </div>
             </div>
           )}

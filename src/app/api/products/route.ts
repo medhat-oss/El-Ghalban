@@ -18,7 +18,13 @@ const createProductSchema = z.object({
   descriptionAr: z.string().optional(),
   price:         z.number().positive("Price must be positive"),
   oldPrice:      z.number().positive().optional().nullable(),
-  images:        z.array(z.string().url()).min(1, "At least one image is required"),
+  images:        z.array(
+    z.object({
+      url: z.string().url(),
+      isMain: z.boolean().default(false),
+      publicId: z.string().optional().nullable(),
+    })
+  ).min(1, "At least one image is required"),
   isAvailable:   z.boolean().default(true),
   isFeatured:    z.boolean().default(false),
   stock:         z.number().int().min(0).default(0),
@@ -68,7 +74,7 @@ export async function GET(request: NextRequest) {
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
-        include: { category: true },
+        include: { category: true, images: true },
         orderBy,
         skip:  (page - 1) * pageSize,
         take:  pageSize,
@@ -119,9 +125,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const { images, ...productData } = validated;
+
     const product = await prisma.product.create({
-      data: validated,
-      include: { category: true },
+      data: {
+        ...productData,
+        images: {
+          create: images.map((img, idx) => ({
+            url: img.url,
+            isMain: idx === 0,
+            publicId: img.publicId,
+          })),
+        },
+      },
+      include: { category: true, images: true },
     });
 
     return NextResponse.json({ success: true, data: product }, { status: 201 });

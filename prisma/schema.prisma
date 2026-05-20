@@ -39,7 +39,7 @@ model Product {
   descriptionAr String?     @db.Text
   price         Float       // Price in EGP
   oldPrice      Float?      // Original price before discount
-  images        String[]    // Array of Cloudinary URLs
+  images        ProductImage[] // Changed from String[] to relation
   isAvailable   Boolean     @default(true)
   isFeatured    Boolean     @default(false)
   stock         Int         @default(0)
@@ -59,6 +59,24 @@ model Product {
   @@index([isAvailable, isFeatured])
   @@index([price])
   @@map("products")
+}
+
+// ─────────────────────────────────────────────
+// ProductImage Model (جديد: لدعم تعدد الصور)
+// ─────────────────────────────────────────────
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String   // Cloudinary URL
+  publicId  String?  // Cloudinary Public ID for deletion
+  isMain    Boolean  @default(false)
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@map("product_images")
 }
 
 // ─────────────────────────────────────────────

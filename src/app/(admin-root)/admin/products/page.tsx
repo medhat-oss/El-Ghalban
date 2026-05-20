@@ -17,7 +17,7 @@ export const revalidate = 0;
 async function getProducts() {
   try {
     return await prisma.product.findMany({
-      include:  { category: true },
+      include:  { category: true, images: true },
       orderBy: { createdAt: "desc" },
     });
   } catch { return []; }
@@ -86,9 +86,9 @@ export default async function AdminProductsPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-silver-100 dark:bg-slate-700 flex-shrink-0 border border-silver-200 dark:border-slate-600">
-                          {product.images?.[0] ? (
+                          {product.images?.[0]?.url ? (
                             <Image
-                              src={product.images[0]}
+                              src={product.images[0].url}
                               alt={product.nameAr}
                               fill
                               className="object-cover"

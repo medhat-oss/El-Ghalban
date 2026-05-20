@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: EditProductPageProps): Promis
 
 async function getProductAndCategories(id: string) {
   const [product, categories] = await Promise.all([
-    prisma.product.findUnique({ where: { id }, include: { category: true } }),
+    prisma.product.findUnique({ where: { id }, include: { category: true, images: true } }),
     prisma.category.findMany({ orderBy: { nameAr: "asc" } }),
   ]);
   return { product, categories };

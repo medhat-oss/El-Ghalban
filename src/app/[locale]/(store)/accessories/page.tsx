@@ -60,7 +60,7 @@ async function getAccessories(filters: AccessoriesPageProps["searchParams"]): Pr
 
     const products = await prisma.product.findMany({
       where:   whereClause,
-      include: { category: true },
+      include: { category: true, images: true },
       orderBy: orderByMap[filters.sort ?? "newest"] ?? { createdAt: "desc" },
     });
 

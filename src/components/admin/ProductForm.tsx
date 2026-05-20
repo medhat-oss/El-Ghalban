@@ -86,7 +86,7 @@ export default function ProductForm({ initialData, categories, productId, mode }
       const res  = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json();
       if (data.success) {
-        setField("images", [...form.images, data.url]);
+        setField("images", [...form.images, { url: data.url, isMain: form.images.length === 0, publicId: data.publicId || null }]);
         toast.success("تم الرفع بنجاح ✅");
       }
     } catch {
@@ -219,9 +219,9 @@ export default function ProductForm({ initialData, categories, productId, mode }
           <p className="font-bold text-silver-600 dark:text-slate-300">اسحب الصور هنا أو انقر للاختيار</p>
         </div>
         <div className="grid grid-cols-5 gap-3 mt-4">
-          {form.images.map((url, index) => (
-            <div key={url} className="relative aspect-square rounded-xl overflow-hidden border">
-              <Image src={url} alt="img" fill className="object-cover" />
+          {form.images.map((img, index) => (
+            <div key={img.url + index} className="relative aspect-square rounded-xl overflow-hidden border">
+              <Image src={img.url} alt="img" fill className="object-cover" />
               <button type="button" onClick={() => setField("images", form.images.filter((_, i) => i !== index))} className="absolute top-1 end-1 bg-red-500 text-white rounded-full p-1"><X size={12}/></button>
             </div>
           ))}

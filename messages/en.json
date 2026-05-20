@@ -1,0 +1,69 @@
+{
+  "Navbar": {
+    "mobiles": "Mobiles",
+    "accessories": "Accessories",
+    "maintenance": "Maintenance",
+    "searchPlaceholder": "Search for mobile, case, repair...",
+    "cart": "Cart"
+  },
+  "Store": {
+    "featured": "Featured Products",
+    "featuredSubtitle": "Most popular and in-demand products",
+    "latest": "Latest Products",
+    "latestSubtitle": "Just arrived in our store",
+    "viewAll": "View All",
+    "addToCart": "Add to Cart",
+    "added": "Added",
+    "outOfStock": "Out of Stock",
+    "outOfStockFull": "Currently Unavailable",
+    "currency": "EGP",
+    "quickView": "Quick View",
+    "description": "Description",
+    "discount": "OFF",
+    "featured_badge": "Featured",
+    "unavailable_badge": "Unavailable"
+  },
+  "Hero": {
+    "badge": "Latest Mobiles & Accessories",
+    "title1": "Welcome to",
+    "title2": "El-Ghalban",
+    "subtitle": "Discover the best prices on mobiles and accessories with free delivery and quality guarantee on all our products.",
+    "cta_mobiles": "Browse Mobiles",
+    "cta_whatsapp": "Contact Us",
+    "stat_quality": "Quality Guarantee",
+    "stat_delivery": "Free Delivery",
+    "stat_customers": "Happy Customers"
+  },
+  "Categories": {
+    "mobiles": "Mobiles",
+    "mobiles_desc": "Latest smartphones",
+    "accessories": "Accessories",
+    "accessories_desc": "Headphones, chargers, and more",
+    "maintenance": "Maintenance",
+    "maintenance_desc": "Professional repair service",
+    "browse": "Browse Now"
+  },
+  "WhyUs": {
+    "title": "Why El-Ghalban?",
+    "subtitle": "We pride ourselves on providing the best shopping experience",
+    "delivery": "Fastest Delivery",
+    "delivery_desc": "We deliver as fast as possible",
+    "quality": "Quality Guarantee",
+    "quality_desc": "All products are 100% original",
+    "price": "Best Prices",
+    "price_desc": "Prices you won't find anywhere else",
+    "payment": "Safe Payment",
+    "payment_desc": "Cash on delivery"
+  },
+  "Banner": {
+    "badge": "Exclusive Offers",
+    "title": "Free Delivery on All Orders",
+    "subtitle": "Order now and receive in the fastest time with quality guarantee and cash on delivery",
+    "cta": "Order Now"
+  },
+  "Contact": {
+    "title": "Need Help? We're Here!",
+    "subtitle": "Contact us directly on WhatsApp for any inquiry or special request.",
+    "cta": "Start a Chat"
+  }
+}

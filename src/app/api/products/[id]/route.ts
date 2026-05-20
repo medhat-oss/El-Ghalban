@@ -19,7 +19,14 @@ const updateProductSchema = z.object({
   descriptionAr: z.string().optional().nullable(),
   price:         z.number().positive().optional(),
   oldPrice:      z.number().positive().optional().nullable(),
-  images:        z.array(z.string().url()).optional(),
+  images:        z.array(
+    z.object({
+      id: z.string().optional(),
+      url: z.string().url(),
+      isMain: z.boolean().default(false),
+      publicId: z.string().optional().nullable(),
+    })
+  ).optional(),
   isAvailable:   z.boolean().optional(),
   isFeatured:    z.boolean().optional(),
   stock:         z.number().int().min(0).optional(),
@@ -37,7 +44,7 @@ export async function GET(
     const params = await props.params;
     const product = await prisma.product.findUnique({
       where:   { id: params.id },
-      include: { category: true },
+      include: { category: true, images: true },
     });
 
     if (!product) {
@@ -95,10 +102,24 @@ export async function PATCH(
       }
     }
 
+    const { images, ...productData } = validated;
+    
+    const updateData: any = { ...productData };
+    if (images) {
+      updateData.images = {
+        deleteMany: {}, // Simplest way to update images: delete old ones and recreate
+        create: images.map((img, idx) => ({
+          url: img.url,
+          isMain: idx === 0,
+          publicId: img.publicId,
+        }))
+      };
+    }
+
     const updated = await prisma.product.update({
       where:   { id: params.id },
-      data:    validated,
-      include: { category: true },
+      data:    updateData,
+      include: { category: true, images: true },
     });
 
     return NextResponse.json({ success: true, data: updated });

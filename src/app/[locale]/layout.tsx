@@ -6,9 +6,11 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { CartProvider } from "@/context/CartContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import "./globals.css";
+import "../globals.css";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -43,17 +45,23 @@ export const viewport: Viewport = {
   themeColor: "#0ea5e9",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params: { locale }
 }: {
   children: React.ReactNode;
+  params: { locale: string };
 }) {
+  const messages = await getMessages();
+  const direction = locale === 'ar' ? 'rtl' : 'ltr';
+
   return (
-    <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
+    <html lang={locale} dir={direction} className={cairo.variable} suppressHydrationWarning>
       <body className="font-cairo antialiased bg-white text-silver-900 dark:bg-[#0f172a] dark:text-slate-100 transition-colors duration-300">
-        <ThemeProvider>
-          <CartProvider>
-            {children}
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider>
+            <CartProvider>
+              {children}
           <Toaster
             position="bottom-center"
             toastOptions={{
@@ -76,8 +84,9 @@ export default function RootLayout({
               },
             }}
           />
-        </CartProvider>
-        </ThemeProvider>
+          </CartProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

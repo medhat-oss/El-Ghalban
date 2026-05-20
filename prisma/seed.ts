@@ -134,10 +134,31 @@ async function main() {
   ];
 
   for (const product of mobileProducts) {
+    const { images, ...rest } = product;
     const created = await prisma.product.upsert({
       where:  { id: `seed-mobile-${product.model}` },
-      update: { ...product, categoryId: mobilesCategory.id },
-      create: { id: `seed-mobile-${product.model}`, ...product, categoryId: mobilesCategory.id },
+      update: {
+        ...rest,
+        categoryId: mobilesCategory.id,
+        images: {
+          deleteMany: {},
+          create: images.map((url: string, idx: number) => ({
+            url,
+            isMain: idx === 0,
+          })),
+        },
+      },
+      create: {
+        id: `seed-mobile-${product.model}`,
+        ...rest,
+        categoryId: mobilesCategory.id,
+        images: {
+          create: images.map((url: string, idx: number) => ({
+            url,
+            isMain: idx === 0,
+          })),
+        },
+      },
     });
     console.log(`  📱 ${created.nameAr}`);
   }
@@ -227,10 +248,31 @@ async function main() {
   ];
 
   for (const product of accessoryProducts) {
+    const { images, ...rest } = product;
     const created = await prisma.product.upsert({
       where:  { id: `seed-acc-${product.model}` },
-      update: { ...product, categoryId: accessoriesCategory.id },
-      create: { id: `seed-acc-${product.model}`, ...product, categoryId: accessoriesCategory.id },
+      update: {
+        ...rest,
+        categoryId: accessoriesCategory.id,
+        images: {
+          deleteMany: {},
+          create: images.map((url: string, idx: number) => ({
+            url,
+            isMain: idx === 0,
+          })),
+        },
+      },
+      create: {
+        id: `seed-acc-${product.model}`,
+        ...rest,
+        categoryId: accessoriesCategory.id,
+        images: {
+          create: images.map((url: string, idx: number) => ({
+            url,
+            isMain: idx === 0,
+          })),
+        },
+      },
     });
     console.log(`  🎧 ${created.nameAr}`);
   }

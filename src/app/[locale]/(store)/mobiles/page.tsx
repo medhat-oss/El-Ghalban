@@ -58,7 +58,7 @@ async function getMobiles(filters: MobilesPageProps["searchParams"]): Promise<{
     const [products, allBrands] = await Promise.all([
       prisma.product.findMany({
         where:   whereClause,
-        include: { category: true },
+        include: { category: true, images: true },
         orderBy,
       }),
       prisma.product.findMany({

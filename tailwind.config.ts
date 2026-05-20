@@ -53,11 +53,16 @@ const config: Config = {
 
       // ── Custom Shadows ────────────────────────────────────
       boxShadow: {
-        card:     "0 1px 3px rgba(0,0,0,.08), 0 8px 24px rgba(14,165,233,.07)",
-        "card-hover": "0 4px 12px rgba(0,0,0,.1), 0 16px 40px rgba(14,165,233,.12)",
-        nav:      "0 2px 20px rgba(0,0,0,.08)",
-        btn:      "0 2px 8px rgba(14,165,233,.35)",
-        "btn-hover": "0 4px 16px rgba(14,165,233,.5)",
+        apple: "0 4px 24px -6px rgba(0, 0, 0, 0.08)",
+        "apple-sm": "0 2px 8px -2px rgba(0, 0, 0, 0.05)",
+        "apple-md": "0 8px 32px -8px rgba(0, 0, 0, 0.08)",
+        "apple-lg": "0 16px 48px -12px rgba(0, 0, 0, 0.12)",
+        "apple-dark": "0 4px 24px -6px rgba(0, 0, 0, 0.3)",
+        card: "0 2px 10px rgba(0,0,0,0.04), 0 10px 30px rgba(14,165,233,0.04)",
+        "card-hover": "0 10px 40px -10px rgba(0,0,0,0.08), 0 20px 40px rgba(14,165,233,0.08)",
+        nav: "0 4px 24px -6px rgba(0,0,0,0.06)",
+        btn: "0 4px 12px -4px rgba(14,165,233,0.4)",
+        "btn-hover": "0 8px 20px -6px rgba(14,165,233,0.5)",
       },
 
       // ── Custom Animations ─────────────────────────────────
@@ -74,6 +79,10 @@ const config: Config = {
           "0%":   { transform: "translateY(16px)", opacity: "0" },
           "100%": { transform: "translateY(0)",    opacity: "1" },
         },
+        "slide-up-fade": {
+          "0%": { transform: "translateY(12px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
         "pulse-soft": {
           "0%, 100%": { opacity: "1" },
           "50%":      { opacity: "0.6" },
@@ -84,11 +93,12 @@ const config: Config = {
         },
       },
       animation: {
-        "slide-in-right":  "slide-in-right 0.35s cubic-bezier(0.16,1,0.3,1)",
+        "slide-in-right":  "slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         "slide-out-right": "slide-out-right 0.3s ease-in",
-        "fade-up":         "fade-up 0.4s ease-out",
-        "pulse-soft":      "pulse-soft 2s ease-in-out infinite",
-        shimmer:           "shimmer 1.6s linear infinite",
+        "fade-up":         "fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        "slide-up-fade":   "slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        "pulse-soft":      "pulse-soft 2.5s ease-in-out infinite",
+        shimmer:           "shimmer 2s linear infinite",
       },
 
       // ── Spacing additions ─────────────────────────────────
@@ -114,6 +124,13 @@ const config: Config = {
         "80": "80",
         "90": "90",
         "100": "100",
+      },
+      // ── Background Gradients ──────────────────────────────
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-soft': 'linear-gradient(to right, #f0f9ff, #e0f2fe)',
+        'gradient-dark-soft': 'linear-gradient(to right, #0f172a, #1e293b)',
+        'gradient-glow': 'radial-gradient(circle at center, rgba(14,165,233,0.15) 0%, transparent 70%)',
       },
     },
   },
