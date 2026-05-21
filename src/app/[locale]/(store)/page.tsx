@@ -219,7 +219,7 @@ export default async function HomePage() {
                 {tStore("viewAll")} <ArrowLeft size={14} className={locale === "ar" ? "rotate-180" : ""} />
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
               {featuredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -275,7 +275,7 @@ export default async function HomePage() {
                 {tStore("viewAll")} <ArrowLeft size={14} className={locale === "ar" ? "rotate-180" : ""} />
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
               {latestProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -1,14 +1,17 @@
 // ============================================================
 // El-Ghalban | app/(store)/accessories/page.tsx
+// Server Component with Suspense
 // ============================================================
 export const dynamic = 'force-dynamic';
-import React from "react";
+import React, { Suspense } from "react";
 import { Headphones } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import AccessoriesFilter from "./AccessoriesFilter";
+import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import type { ProductWithCategory } from "@/types";
 import type { Metadata } from "next";
+import { getLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "إكسسوارات",
@@ -30,52 +33,87 @@ interface AccessoriesPageProps {
   searchParams: { sub?: string; min?: string; max?: string; sort?: string };
 }
 
-async function getAccessories(filters: AccessoriesPageProps["searchParams"]): Promise<ProductWithCategory[]> {
-  try {
-    const category = await prisma.category.findUnique({
-      where: { slug: "accessories" },
-    });
-    if (!category) return [];
+async function getAccessoriesFiltersData(filters: AccessoriesPageProps["searchParams"]) {
+  const category = await prisma.category.findUnique({
+    where: { slug: "accessories" },
+  });
 
-    const whereClause: Record<string, unknown> = {
-      categoryId:  category.id,
-      isAvailable: true,
+  if (!category) return { count: 0, whereClause: {} };
+
+  const whereClause: Record<string, any> = {
+    categoryId: category.id,
+    isAvailable: true,
+  };
+
+  if (filters.sub) whereClause.brand = filters.sub;
+  if (filters.min || filters.max) {
+    whereClause.price = {
+      ...(filters.min ? { gte: parseFloat(filters.min) } : {}),
+      ...(filters.max ? { lte: parseFloat(filters.max) } : {}),
     };
-
-    // Subcategory: stored in the `model` field or brand
-    if (filters.sub) whereClause.brand = filters.sub;
-    if (filters.min || filters.max) {
-      whereClause.price = {
-        ...(filters.min ? { gte: parseFloat(filters.min) } : {}),
-        ...(filters.max ? { lte: parseFloat(filters.max) } : {}),
-      };
-    }
-
-    const orderByMap: Record<string, Record<string, string>> = {
-      price_asc:  { price: "asc" },
-      price_desc: { price: "desc" },
-      newest:     { createdAt: "desc" },
-      featured:   { isFeatured: "desc" },
-    };
-
-    const products = await prisma.product.findMany({
-      where:   whereClause,
-      include: { category: true, images: true },
-      orderBy: orderByMap[filters.sort ?? "newest"] ?? { createdAt: "desc" },
-    });
-
-    return products as unknown as ProductWithCategory[];
-  } catch {
-    return [];
   }
+
+  const count = await prisma.product.count({ where: whereClause });
+
+  return { count, whereClause };
+}
+
+async function AccessoriesGridData({
+  whereClause,
+  sort,
+  isEn,
+}: {
+  whereClause: Record<string, any>;
+  sort?: string;
+  isEn: boolean;
+}) {
+  const orderByMap: Record<string, Record<string, string>> = {
+    price_asc: { price: "asc" },
+    price_desc: { price: "desc" },
+    newest: { createdAt: "desc" },
+    featured: { isFeatured: "desc" },
+  };
+
+  const products = await prisma.product.findMany({
+    where: whereClause,
+    include: {
+      category: { select: { id: true, name: true, nameAr: true, slug: true } },
+      images: { select: { id: true, url: true, isMain: true } },
+    },
+    orderBy: orderByMap[sort ?? "newest"] ?? { createdAt: "desc" },
+  });
+
+  if (products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <Headphones size={60} className="text-silver-200 dark:text-slate-700 mb-4" />
+        <h3 className="font-black text-silver-600 dark:text-slate-100 text-xl">
+          {isEn ? "No accessories found" : "لا توجد إكسسوارات"}
+        </h3>
+        <p className="text-silver-400 dark:text-slate-400 mt-2">
+          {isEn ? "Try changing the filter criteria" : "جرّب تغيير معايير الفلتر"}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product as unknown as ProductWithCategory} />
+      ))}
+    </div>
+  );
 }
 
 export default async function AccessoriesPage({ searchParams }: AccessoriesPageProps) {
-  const products = await getAccessories(searchParams);
   const currentSub = searchParams.sub ?? "";
+  const locale = await getLocale();
+  const isEn = locale === 'en';
+  const { count, whereClause } = await getAccessoriesFiltersData(searchParams);
 
   return (
-    <div className="min-h-screen bg-silver-50 dark:bg-[#0f172a]">
+    <div className="min-h-screen bg-silver-50 dark:bg-[#0f172a]" dir={isEn ? 'ltr' : 'rtl'}>
       {/* ── Page Header ────────────────────────────────────── */}
       <div className="bg-gradient-to-r from-violet-600 to-violet-800 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -84,9 +122,9 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
               <Headphones size={24} className="text-white" />
             </div>
             <div>
-              <h1 className="text-white font-black text-3xl">إكسسوارات 🎧</h1>
+              <h1 className="text-white font-black text-3xl">{isEn ? "Accessories 🎧" : "إكسسوارات 🎧"}</h1>
               <p className="text-violet-200 text-sm mt-1">
-                {products.length} منتج — سماعات، شواحن، باور بانك، وأكثر
+                {count} {isEn ? "products — Headphones, chargers, power banks, and more" : "منتج — سماعات، شواحن، باور بانك، وأكثر"}
               </p>
             </div>
           </div>
@@ -98,6 +136,10 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
             {SUBCATEGORIES.map(({ value, label, emoji }) => {
+              const displayLabel = isEn 
+                ? (label === "الكل" ? "All" : label === "سماعات" ? "Audio" : label === "باور بانك" ? "Power Banks" : label === "شواحن" ? "Chargers" : label === "كفرات وحماية" ? "Cases" : label === "كابلات" ? "Cables" : label)
+                : label;
+
               const params = new URLSearchParams(
                 value ? { sub: value, ...(searchParams.sort ? { sort: searchParams.sort } : {}) }
                        : (searchParams.sort ? { sort: searchParams.sort } : {})
@@ -114,7 +156,7 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
                                 }`}
                 >
                   <span>{emoji}</span>
-                  {label}
+                  {displayLabel}
                 </a>
               );
             })}
@@ -138,19 +180,9 @@ export default async function AccessoriesPage({ searchParams }: AccessoriesPageP
 
           {/* Grid */}
           <div className="flex-1">
-            {products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 text-center">
-                <Headphones size={60} className="text-silver-200 dark:text-slate-700 mb-4" />
-                <h3 className="font-black text-silver-600 dark:text-slate-100 text-xl">لا توجد إكسسوارات</h3>
-                <p className="text-silver-400 dark:text-slate-400 mt-2">جرّب تغيير معايير الفلتر</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-                {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            )}
+            <Suspense fallback={<ProductGridSkeleton />} key={JSON.stringify(searchParams)}>
+              <AccessoriesGridData whereClause={whereClause} sort={searchParams.sort} isEn={isEn} />
+            </Suspense>
           </div>
         </div>
       </div>

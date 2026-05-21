@@ -74,18 +74,19 @@ export default function Navbar() {
             {/* ── Logo ─────────────────────────────────────── */}
             <Link
               href="/"
-              className="flex items-center gap-2.5 group flex-shrink-0"
+              prefetch={true}
+              className="flex items-center gap-2 group flex-shrink-0"
               aria-label="الغلبان - الصفحة الرئيسية"
             >
-              <div className="relative w-9 h-9 flex items-center justify-center
-                              transition-all duration-200 group-hover:scale-105">
-                <Image src="/logo.png" alt="الغلبان Logo" fill className="object-contain" priority />
+              <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center
+                              transition-transform duration-300 group-hover:scale-105 drop-shadow-sm">
+                <Image src="/logo.png" alt="الغلبان Logo" fill className="object-contain" priority sizes="80px" />
               </div>
-              <div className="flex flex-col leading-tight">
-                <span className="text-sky-600 dark:text-sky-400 font-black text-xl tracking-tight leading-none">
-                  الغلبان
+              <div className="flex flex-col leading-tight mt-1">
+                <span className="text-sky-600 dark:text-sky-400 font-black text-2xl tracking-tight leading-none">
+                  {locale === 'ar' ? 'الغلبان' : 'El-Ghalban'}
                 </span>
-                <span className="text-silver-400 dark:text-slate-400 text-[10px] font-medium leading-none">
+                <span className="text-slate-400 dark:text-slate-500 text-[10px] font-bold leading-none mt-1">
                   {t('mobiles')} · {t('accessories')} · {t('maintenance')}
                 </span>
               </div>
@@ -97,6 +98,7 @@ export default function Navbar() {
                 <li key={href}>
                   <Link
                     href={href as any}
+                    prefetch={true}
                     className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
                       transition-colors duration-200 group
                       ${isActive(href)
@@ -155,7 +157,7 @@ export default function Navbar() {
               {/* Cart Button */}
               <button
                 onClick={openCart}
-                aria-label={`سلة التسوق - ${itemCount} منتج`}
+                aria-label={locale === 'ar' ? `سلة التسوق - ${itemCount} منتج` : `Cart - ${itemCount} items`}
                 className="relative flex items-center justify-center w-10 h-10
                            rounded-xl bg-sky-50 dark:bg-sky-500/10 hover:bg-sky-100 dark:hover:bg-sky-500/20
                            text-sky-600 dark:text-sky-400 transition-all duration-200
@@ -177,7 +179,7 @@ export default function Navbar() {
               {/* Hamburger (mobile) */}
               <button
                 onClick={() => setIsMenuOpen((v) => !v)}
-                aria-label="قائمة التنقل"
+                aria-label={locale === 'ar' ? "قائمة التنقل" : "Navigation Menu"}
                 aria-expanded={isMenuOpen}
                 className="md:hidden flex items-center justify-center w-10 h-10
                            rounded-xl hover:bg-silver-100 dark:hover:bg-silver-800 text-silver-600 dark:text-silver-300
@@ -204,6 +206,7 @@ export default function Navbar() {
                   <li key={href}>
                     <Link
                       href={href as any}
+                      prefetch={true}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold
                         transition-all duration-200
                         ${isActive(href)

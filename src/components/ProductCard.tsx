@@ -12,6 +12,7 @@ import type { ProductWithCategory } from "@/types";
 import toast from "react-hot-toast";
 import QuickViewModal from "./QuickViewModal";
 import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/navigation";
 
 interface ProductCardProps {
   product: ProductWithCategory;
@@ -34,8 +35,8 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   // Prefer the image flagged as main; fall back to first image; then placeholder
   const primaryImage =
-    product.images?.find((img) => img.isMain)?.url ??
-    product.images?.[0]?.url ??
+    product.images?.find((img) => img.isMain)?.url ||
+    product.images?.[0]?.url ||
     "/placeholder.png";
 
   const [imgSrc, setImgSrc] = useState(primaryImage);
@@ -73,28 +74,35 @@ export default function ProductCard({ product }: ProductCardProps) {
       className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[24px] group flex flex-col h-full overflow-hidden transition-all duration-500 hover:shadow-apple-md hover:-translate-y-1 relative"
       aria-label={productName}
     >
-      {/* ── Product Image ───────────────────────────────────── */}
-      <div className="relative aspect-[4/3] sm:aspect-square bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center overflow-hidden transition-colors duration-300">
-        <Image
-          src={imgSrc}
-          alt={productName}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          onError={() => setImgSrc("/placeholder.png")}
-        />
+      {/* ── Product Link Wrapper ───────────────────────────────────── */}
+      <Link href={`/product/${product.id}` as any} prefetch={true} className="flex flex-col flex-1 relative z-0">
+        
+        {/* ── Product Image ───────────────────────────────────── */}
+        <div className="relative w-full aspect-square overflow-hidden rounded-xl bg-transparent">
+          <Image
+            src={imgSrc}
+            alt={productName}
+            fill
+            className="w-full h-full object-cover"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            onError={() => setImgSrc("/placeholder.png")}
+          />
 
-        {/* Quick View Button overlay */}
-        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <button
-            type="button"
-            onClick={() => setIsQuickViewOpen(true)}
-            className="bg-white text-sky-600 hover:bg-sky-500 hover:text-white rounded-full px-4 py-2 shadow-lg translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-2 font-bold text-sm"
-          >
-            <Eye size={16} />
-            <span>{t("quickView")}</span>
-          </button>
-        </div>
+          {/* Quick View Button overlay */}
+          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20 pointer-events-none">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsQuickViewOpen(true);
+              }}
+              className="bg-white text-sky-600 hover:bg-sky-500 hover:text-white rounded-full px-4 py-2 shadow-lg translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-2 font-bold text-sm pointer-events-auto"
+            >
+              <Eye size={16} />
+              <span>{t("quickView")}</span>
+            </button>
+          </div>
 
         {/* Badges */}
         <div className="absolute top-3 start-3 flex flex-col gap-1.5 z-10">
@@ -109,7 +117,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           )}
           {!product.isAvailable && (
-            <span className="bg-slate-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
+            <span className="bg-neutral-100 dark:bg-slate-800 text-neutral-900 dark:text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
               {t("unavailable_badge")}
             </span>
           )}
@@ -118,7 +126,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Brand pill */}
         {product.brand && (
           <div className="absolute bottom-2 end-2">
-            <span className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-silver-200 dark:border-slate-700 text-silver-600 dark:text-silver-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
+            <span className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-neutral-200 dark:border-slate-700 text-neutral-600 dark:text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
               {product.brand}
             </span>
           </div>
@@ -133,22 +141,22 @@ export default function ProductCard({ product }: ProductCardProps) {
         </span>
 
         {/* Name */}
-        <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm sm:text-base line-clamp-2 leading-snug flex-1">
+        <h3 className="font-bold text-neutral-950 dark:text-neutral-50 text-sm sm:text-base line-clamp-2 leading-snug flex-1">
           {productName}
         </h3>
 
         {/* Description */}
         {productDescription && (
-          <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 leading-relaxed">
+          <p className="text-neutral-600 dark:text-neutral-400 text-xs line-clamp-2 leading-relaxed">
             {productDescription}
           </p>
         )}
 
         {/* Price */}
-        <div className="flex items-end gap-2 mt-auto pt-3">
-          <span className="text-slate-900 dark:text-white font-black text-xl tracking-tight flex items-baseline gap-1">
+        <div className="flex items-end gap-2 mt-auto pt-3 pb-2">
+          <span className="text-neutral-950 dark:text-neutral-50 font-black text-xl tracking-tight flex items-baseline gap-1">
             {product.price.toFixed(2)}
-            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-sm font-semibold text-neutral-600 dark:text-neutral-400">
               {t("currency")}
             </span>
           </span>
@@ -158,12 +166,18 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           )}
         </div>
+      </div>
+      </Link>
 
-        {/* Add to Cart Container - Reveals smoothly */}
-        <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-2">
-          <button
-            type="button"
-            onClick={handleAddToCart}
+      {/* Add to Cart Container - Reveals smoothly */}
+      <div className="px-4 pb-4 overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-hover:max-h-16 group-hover:opacity-100 z-10">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleAddToCart();
+          }}
             disabled={!product.isAvailable || added}
             aria-label={isAr ? `إضافة ${product.nameAr} إلى السلة` : `Add ${product.name} to cart`}
             className={`w-full flex items-center justify-center gap-2
@@ -190,7 +204,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               </>
             )}
           </button>
-        </div>
       </div>
 
       <QuickViewModal

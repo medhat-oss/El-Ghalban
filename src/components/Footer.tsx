@@ -3,13 +3,16 @@
 // ============================================================
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { Phone, MapPin, Mail, Zap, MessageCircle } from "lucide-react";
+import { useLocale } from "next-intl";
 
 const PHONE = process.env.NEXT_PUBLIC_STORE_WHATSAPP ?? "201XXXXXXXXX";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const locale = useLocale() || 'en';
+  const isAr = locale === 'ar';
 
   return (
     <footer className="bg-slate-950 text-slate-300 mt-24 border-t border-slate-900 relative overflow-hidden">
@@ -27,15 +30,18 @@ export default function Footer() {
                 <Zap size={20} className="text-white" fill="white" />
               </div>
               <div>
-                <p className="text-white font-black text-2xl tracking-tight leading-none">الغلبان</p>
+                <p className="text-white font-black text-2xl tracking-tight leading-none">
+                  {isAr ? "الغلبان" : "El-Ghalban"}
+                </p>
                 <p className="text-sky-400 text-xs font-bold leading-none mt-1">
-                  موبايلات · إكسسوارات · صيانة
+                  {isAr ? "موبايلات · إكسسوارات · صيانة" : "Mobiles · Accessories · Maintenance"}
                 </p>
               </div>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
-              متجرك المتخصص في أحدث الموبايلات وأفضل الإكسسوارات بأسعار لا تُقاوم،
-              مع خدمة صيانة احترافية تضمن لك أعلى جودة.
+              {isAr 
+                ? "متجرك المتخصص في أحدث الموبايلات وأفضل الإكسسوارات بأسعار لا تُقاوم، مع خدمة صيانة احترافية تضمن لك أعلى جودة."
+                : "Your specialized store for the latest mobiles and best accessories at unbeatable prices, with professional maintenance service guaranteeing top quality."}
             </p>
             <a
               href={`https://wa.me/${PHONE}`}
@@ -46,23 +52,24 @@ export default function Footer() {
                          transition-all duration-200 hover:scale-105"
             >
               <MessageCircle size={16} />
-              تواصل على واتساب
+              {isAr ? "تواصل على واتساب" : "Contact via WhatsApp"}
             </a>
           </div>
 
           {/* ── Quick Links ─────────────────────────────────── */}
           <div>
-            <h3 className="text-white font-bold text-lg mb-6">روابط سريعة</h3>
+            <h3 className="text-white font-bold text-lg mb-6">{isAr ? "روابط سريعة" : "Quick Links"}</h3>
             <ul className="space-y-3">
               {[
-                { href: "/",            label: "الرئيسية" },
-                { href: "/mobiles",     label: "موبايلات" },
-                { href: "/accessories", label: "إكسسوارات" },
-                { href: "/maintenance", label: "خدمات الصيانة" },
+                { href: "/",            label: isAr ? "الرئيسية" : "Home" },
+                { href: "/mobiles",     label: isAr ? "موبايلات" : "Mobiles" },
+                { href: "/accessories", label: isAr ? "إكسسوارات" : "Accessories" },
+                { href: "/maintenance", label: isAr ? "خدمات الصيانة" : "Maintenance Services" },
               ].map(({ href, label }) => (
                 <li key={href}>
                   <Link
-                    href={href}
+                    href={href as any}
+                    prefetch={true}
                     className="text-slate-400 hover:text-white text-sm font-medium
                                transition-colors duration-200 flex items-center gap-2 group"
                   >
@@ -76,16 +83,23 @@ export default function Footer() {
 
           {/* ── Services ─────────────────────────────────────── */}
           <div>
-            <h3 className="text-white font-bold text-base mb-4">خدماتنا</h3>
+            <h3 className="text-white font-bold text-base mb-4">{isAr ? "خدماتنا" : "Our Services"}</h3>
             <ul className="space-y-2.5">
-              {[
+              {(isAr ? [
                 "صيانة الشاشات",
                 "استبدال البطاريات",
                 "إصلاح البوردات",
                 "فلاش وتحديث النظام",
                 "فتح شبكات",
                 "تنظيف وصيانة دورية",
-              ].map((s) => (
+              ] : [
+                "Screen Repair",
+                "Battery Replacement",
+                "Motherboard Repair",
+                "Flash & System Update",
+                "Network Unlocking",
+                "Periodic Maintenance",
+              ]).map((s) => (
                 <li key={s}>
                   <span className="text-silver-400 text-sm flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full bg-silver-600" />
@@ -98,7 +112,7 @@ export default function Footer() {
 
           {/* ── Contact ──────────────────────────────────────── */}
           <div>
-            <h3 className="text-white font-bold text-base mb-4">تواصل معنا</h3>
+            <h3 className="text-white font-bold text-base mb-4">{isAr ? "تواصل معنا" : "Contact Us"}</h3>
             <ul className="space-y-3">
               <li>
                 <a
@@ -129,7 +143,7 @@ export default function Footer() {
                   <MapPin size={14} className="text-sky-400" />
                 </div>
                 <span>
-                  {process.env.NEXT_PUBLIC_STORE_ADDRESS ?? "القاهرة، مصر"}
+                  {process.env.NEXT_PUBLIC_STORE_ADDRESS ?? (isAr ? "القاهرة، مصر" : "Cairo, Egypt")}
                 </span>
               </li>
             </ul>
@@ -142,10 +156,10 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6
                         flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-500 text-sm font-medium">
-            © {year} الغلبان. جميع الحقوق محفوظة.
+            © {year} {isAr ? "الغلبان. جميع الحقوق محفوظة." : "El-Ghalban. All rights reserved."}
           </p>
           <p className="text-slate-500 text-sm font-medium flex items-center gap-2">
-            الدفع عند الاستلام <span className="text-sky-500 text-xs">●</span> توصيل مجاني
+            {isAr ? "الدفع عند الاستلام" : "Cash on Delivery"} <span className="text-sky-500 text-xs">●</span> {isAr ? "توصيل مجاني" : "Free Delivery"}
           </p>
         </div>
       </div>

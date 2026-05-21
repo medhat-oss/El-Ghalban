@@ -7,6 +7,7 @@
 import React, { useState, useTransition } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { SlidersHorizontal, RotateCcw, ChevronDown } from "lucide-react";
+import { useLocale } from "next-intl";
 
 interface MobilesFilterProps {
   brands:       string[];
@@ -16,18 +17,13 @@ interface MobilesFilterProps {
   currentSort?:  string;
 }
 
-const SORT_OPTIONS = [
-  { value: "newest",     label: "الأحدث أولاً" },
-  { value: "featured",   label: "المميز أولاً" },
-  { value: "price_asc",  label: "السعر: من الأقل" },
-  { value: "price_desc", label: "السعر: من الأعلى" },
-];
-
 export default function MobilesFilter({
   brands, currentBrand, currentMin, currentMax, currentSort,
 }: MobilesFilterProps) {
   const router    = useRouter();
   const pathname  = usePathname();
+  const locale    = useLocale();
+  const isEn      = locale === 'en';
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,6 +31,13 @@ export default function MobilesFilter({
   const [minPrice, setMinPrice]           = useState(currentMin ?? "");
   const [maxPrice, setMaxPrice]           = useState(currentMax ?? "");
   const [sortBy, setSortBy]               = useState(currentSort ?? "newest");
+
+  const SORT_OPTIONS = [
+    { value: "newest",     label: isEn ? "Latest" : "الأحدث أولاً" },
+    { value: "featured",   label: isEn ? "Featured" : "المميز أولاً" },
+    { value: "price_asc",  label: isEn ? "Price: Low to High" : "السعر: من الأقل" },
+    { value: "price_desc", label: isEn ? "Price: High to Low" : "السعر: من الأعلى" },
+  ];
 
   const applyFilters = () => {
     const params = new URLSearchParams();
@@ -56,42 +59,44 @@ export default function MobilesFilter({
   const hasActiveFilters = Boolean(currentBrand || currentMin || currentMax || (currentSort && currentSort !== "newest"));
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-card border border-silver-100 dark:border-slate-700">
+    <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-xl backdrop-blur-md" dir={isEn ? 'ltr' : 'rtl'}>
       {/* Header */}
       <button
         className="w-full flex items-center justify-between p-4 lg:cursor-default"
         onClick={() => setIsOpen((v) => !v)}
       >
-        <div className="flex items-center gap-2 font-black text-silver-800 dark:text-slate-100">
-          <SlidersHorizontal size={18} className="text-sky-500" />
-          تصفية النتائج
+        <div className="flex items-center gap-2 font-black text-neutral-950 dark:text-neutral-50">
+          <SlidersHorizontal size={18} className="text-neutral-500 dark:text-neutral-400" />
+          {isEn ? "Filters" : "تصفية النتائج"}
           {hasActiveFilters && (
-            <span className="w-2 h-2 rounded-full bg-sky-500" />
+            <span className="w-2 h-2 rounded-full bg-neutral-900 dark:bg-neutral-100" />
           )}
         </div>
         <ChevronDown
           size={18}
-          className={`text-silver-400 dark:text-slate-400 transition-transform lg:hidden ${isOpen ? "rotate-180" : ""}`}
+          className={`text-neutral-500 dark:text-neutral-400 transition-transform lg:hidden ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {/* Filter Body */}
       <div className={`overflow-hidden transition-all duration-300 lg:!max-h-none lg:!opacity-100
                        ${isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="px-4 pb-4 space-y-5 border-t border-silver-100 dark:border-slate-700 pt-4">
+        <div className="px-4 pb-4 space-y-5 border-t border-neutral-200 dark:border-neutral-800 pt-4">
 
           {/* Sort By */}
           <div>
-            <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">
-              ترتيب حسب
+            <label className="block text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-2">
+              {isEn ? "Sort By" : "ترتيب حسب"}
             </label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="input-field py-2 text-sm"
+              className="w-full bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700 rounded-xl px-3 py-2 text-sm focus:border-neutral-500 outline-none transition-colors appearance-none"
             >
               {SORT_OPTIONS.map(({ value, label }) => (
-                <option key={value} value={value}>{label}</option>
+                <option key={value} value={value} className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+                  {label}
+                </option>
               ))}
             </select>
           </div>
@@ -99,27 +104,27 @@ export default function MobilesFilter({
           {/* Brand Filter */}
           {brands.length > 0 && (
             <div>
-              <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">
-                الماركة
+              <label className="block text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-2">
+                {isEn ? "Brand" : "الماركة"}
               </label>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedBrand("")}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-semibold border-2 transition-all
+                  className={`px-3 py-1.5 rounded-lg text-sm transition-all border border-transparent
                               ${selectedBrand === ""
-                                ? "border-sky-500 bg-sky-50 text-sky-600 dark:bg-sky-500/20 dark:text-sky-400"
-                                : "border-silver-200 text-silver-600 dark:border-slate-600 dark:text-slate-300 hover:border-sky-300 dark:hover:border-sky-500"}`}
+                                ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-950 font-medium"
+                                : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}
                 >
-                  الكل
+                  {isEn ? "All" : "الكل"}
                 </button>
                 {brands.map((brand) => (
                   <button
                     key={brand}
                     onClick={() => setSelectedBrand(brand === selectedBrand ? "" : brand)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-semibold border-2 transition-all
+                    className={`px-3 py-1.5 rounded-lg text-sm transition-all border border-transparent
                                 ${selectedBrand === brand
-                                  ? "border-sky-500 bg-sky-50 text-sky-600 dark:bg-sky-500/20 dark:text-sky-400"
-                                  : "border-silver-200 text-silver-600 dark:border-slate-600 dark:text-slate-300 hover:border-sky-300 dark:hover:border-sky-500"}`}
+                                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-950 font-medium"
+                                  : "bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}
                   >
                     {brand}
                   </button>
@@ -130,26 +135,26 @@ export default function MobilesFilter({
 
           {/* Price Range */}
           <div>
-            <label className="block text-xs font-bold text-silver-500 dark:text-slate-300 uppercase tracking-wide mb-2">
-              نطاق السعر (ج.م)
+            <label className="block text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-2">
+              {isEn ? "Price Range (EGP)" : "نطاق السعر (ج.م)"}
             </label>
             <div className="flex items-center gap-2">
               <input
                 type="number"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                placeholder="من"
+                placeholder={isEn ? "Min" : "من"}
                 min="0"
-                className="input-field py-2 text-sm text-center"
+                className="w-full bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700 rounded-xl px-2 py-2 text-sm text-center placeholder-neutral-400 focus:border-neutral-500 outline-none transition-colors"
               />
-              <span className="text-silver-400 dark:text-slate-400 font-bold flex-shrink-0">—</span>
+              <span className="text-neutral-500 dark:text-neutral-400 font-bold flex-shrink-0">—</span>
               <input
                 type="number"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                placeholder="إلى"
+                placeholder={isEn ? "Max" : "إلى"}
                 min="0"
-                className="input-field py-2 text-sm text-center"
+                className="w-full bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700 rounded-xl px-2 py-2 text-sm text-center placeholder-neutral-400 focus:border-neutral-500 outline-none transition-colors"
               />
             </div>
           </div>
@@ -159,16 +164,16 @@ export default function MobilesFilter({
             <button
               onClick={applyFilters}
               disabled={isPending}
-              className="btn-primary flex-1 py-2.5 text-sm"
+              className="bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-950 font-medium rounded-xl flex-1 py-2.5 text-sm transition-all hover:opacity-90 active:scale-[0.98]"
             >
-              {isPending ? "جاري التطبيق..." : "تطبيق"}
+              {isPending ? (isEn ? "Applying..." : "جاري التطبيق...") : (isEn ? "Apply" : "تطبيق")}
             </button>
             {hasActiveFilters && (
               <button
                 onClick={resetFilters}
                 disabled={isPending}
-                className="btn-secondary px-3 py-2.5"
-                aria-label="إعادة تعيين الفلاتر"
+                className="bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-xl px-3 py-2.5 transition-all border border-transparent active:scale-[0.98]"
+                aria-label={isEn ? "Reset Filters" : "إعادة تعيين الفلاتر"}
               >
                 <RotateCcw size={16} />
               </button>

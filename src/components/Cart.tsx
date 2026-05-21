@@ -25,6 +25,7 @@ export default function Cart() {
   const [customer, setCustomer] = useState<CustomerInfo>(INITIAL_CUSTOMER);
   const [errors, setErrors]   = useState<Partial<CustomerInfo>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!isOpen) {
@@ -158,7 +159,13 @@ export default function Cart() {
                {items.map((item) => (
                  <li key={item.id} className="py-4 flex gap-4 animate-in fade-in slide-in-from-bottom-2">
                     <div className="relative w-20 h-20 bg-gray-50 rounded-xl border overflow-hidden flex-shrink-0">
-                      <Image src={item.image} alt={item.nameAr} fill className="object-cover" />
+                      <Image 
+                        src={brokenImages[item.id] || !item.image ? "/placeholder.png" : item.image} 
+                        alt={item.nameAr} 
+                        fill 
+                        className="object-cover" 
+                        onError={() => setBrokenImages(prev => ({ ...prev, [item.id]: true }))}
+                      />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{item.nameAr}</h3>
